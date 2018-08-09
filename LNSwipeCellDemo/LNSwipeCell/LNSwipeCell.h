@@ -1,0 +1,145 @@
+//
+//  LNSwipeCell.h
+//  LNSwipeCellDemo
+//
+//  Created by 刘宁 on 2018/8/6.
+//  Copyright © 2018年 刘宁. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+extern const NSString *LNSWIPCELL_FONT;
+extern const NSString *LNSWIPCELL_TITLE;
+extern const NSString *LNSWIPCELL_TITLECOLOR;
+extern const NSString *LNSWIPCELL_BACKGROUNDCOLOR;
+extern const NSString *LNSWIPCELL_IMAGE;
+
+
+typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
+    LNSwipeCellStateHadClose   = 0,//默认全部闭合
+    LNSwipeCellStateMoving    ,    //正在打开
+    LNSwipeCellStateHadOpen   ,    //已经打开
+};
+
+@protocol LNSwipeCellDataSource , LNSwipeCellDelete;
+@class LNSwipeModel;
+
+@interface LNSwipeCell : UITableViewCell
+
+
+/**
+ 控制cell状态的model
+ */
+@property (nonatomic, strong) LNSwipeModel *swipeModel;
+
+
+/**
+ cell 的位置
+ */
+@property (nonatomic, strong) NSIndexPath *indexPath;
+
+/**
+ 替换cell的cententView使用
+ */
+@property (nonatomic, strong) UIView *ln_contentView;
+@property (nonatomic, weak) id<LNSwipeCellDelete> swipeCellDelete;
+@property (nonatomic, weak) id<LNSwipeCellDataSource> swipeCellDataSource;
+
+
+/**
+ 当前cell的状态
+ */
+@property (nonatomic, assign) LNSwipeCellState state;
+
+- (void)open:(BOOL)animate;
+- (void)close:(BOOL)animate;
+
+@end
+
+
+
+@protocol LNSwipeCellDataSource <NSObject>
+
+@required
+
+/**
+ number of items
+ 
+ @param swipeCell 当前cell
+ @return count of items;
+ */
+- (int)numberOfItemsInSwipeCell:(LNSwipeCell *)swipeCell;
+
+@optional
+
+/**
+ 设置每个可操作的item都为button，设置好之后返回
+ 
+ @param swipeCell cell
+ @param index   位置
+ @return 设置好的item信息：包括字体、颜色、图片、背景色等
+ key：font，backgroundColor，title，titleColor，image
+ */
+- (NSDictionary *)dispositionForSwipeCell:(LNSwipeCell *)swipeCell atIndex:(int)index;
+
+
+/**
+ 设置每一项的宽度
+ 
+ @param swipeCell cell
+ @param index 位置
+ @return 宽度
+ */
+- (CGFloat)itemWithForSwipeCell:(LNSwipeCell *)swipeCell atIndex:(int)index;
+@end
+
+
+
+/**
+ cell 的事件代理
+ */
+@protocol LNSwipeCellDelete <NSObject>
+
+
+/**
+ 某一个item被点击后触发的事件
+ 
+ @param swipeCell cell
+ @param button button
+ @param index 位置
+ */
+- (void)swipeCell:(LNSwipeCell *)swipeCell didSelectButton:(UIButton *)button atIndex:(int)index;
+
+
+/**
+ cell正在所有滑动，手指还没有离开，不确定是打开还是关闭
+ 
+ @param swipeCell cell
+ */
+- (void)swipeCellMoving:(LNSwipeCell *)swipeCell;
+
+/**
+ 当左滑打开后触发该事件
+ 
+ @param swipeCell cell
+ */
+- (void)swipeCellHadOpen:(LNSwipeCell *)swipeCell;
+
+/**
+ cell优化打开时触发该事件
+ 
+ @param swipeCell cell
+ */
+- (void)swipeCellHadClose:(LNSwipeCell *)swipeCell;
+
+@end
+
+
+
+
+
+
+
+
+
+
