@@ -8,52 +8,30 @@
 
 #import "LNTableViewController.h"
 #import "LNSwipeCell.h"
-#import "LNSwipeModel.h"
 
 @interface LNTableViewController ()<LNSwipeCellDelete,LNSwipeCellDataSource>
-@property (nonatomic, strong) NSMutableArray *dataSource;
+
 @end
 
 @implementation LNTableViewController
-- (NSMutableArray *)dataSource
-{
-    if (!_dataSource) {
-        _dataSource = [NSMutableArray new];
-    }
-    return _dataSource;
-}
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     [self.tableView registerClass:[LNSwipeCell class] forCellReuseIdentifier:@"cell"];
-   
-    [self loadData];
+
 }
 
-- (void)loadData
-{
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            for (int i = 0; i < 20; i++) {
-                LNSwipeModel *model = [[LNSwipeModel alloc]init];
-                model.state = 0;
-                [self.dataSource addObject:model];
-            }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView reloadData];
-            });
-        });
-}
+
 
 #pragma mark - Table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.dataSource.count;
+    return 10;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     LNSwipeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    cell.tableView = tableView;
     cell.swipeCellDelete = self;
     cell.swipeCellDataSource = self;
     cell.ln_contentView.backgroundColor = indexPath.row %2 == 0 ?[UIColor purpleColor]:[UIColor blueColor];
@@ -65,11 +43,6 @@
 {
     return 50;
 }
-
-
-
-
-
 
 
 #pragma mark - swipeCellDelegate && dataSource
@@ -129,25 +102,11 @@
     
 }
 
-// 关闭除了indexPath之外的cell
-- (void)closeCell:(NSIndexPath*)indexPath
+
+
+- (void)dealloc
 {
-    
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        BOOL shouldRefresh = NO;
-        for (LNSwipeModel *model in self.dataSource) {
-            if (model.state == 2) {
-                shouldRefresh = YES;
-                model.state = 0;
-            }
-        }
-        if (shouldRefresh == YES) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView reloadData];
-            });
-        }
-        
-    });
+    NSLog(@"%s",__func__);
 }
 
 

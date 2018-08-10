@@ -7,8 +7,19 @@
 //
 
 #import "LNSwipeCell.h"
-#import "LNSwipeModel.h"
-#import "UIView+Extension.h"
+#import <objc/runtime.h>
+
+// 用来快速访问和设置View的位置相关属性
+@interface UIView (LNFrame)
+@property (nonatomic) CGFloat x;
+@property (nonatomic) CGFloat y;
+@property (nonatomic) CGFloat width;
+@property (nonatomic) CGFloat height;
+@property (nonatomic) CGSize  size;
+@property (nonatomic) CGPoint origin;
+@property (nonatomic) CGFloat centerX;
+@property (nonatomic) CGFloat centerY;
+@end
 
 //  item 对应的key
 const NSString *LNSWIPCELL_FONT = @"LNSwipeCell_Font";
@@ -62,7 +73,7 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    self.ln_contentView.frame = self.contentView.bounds;
+    self.ln_contentView.size = self.contentView.size;
 }
 
 - (void)customUI
@@ -89,6 +100,22 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
     [self.ln_contentView addGestureRecognizer:pan];
     self.panGesture = pan;
     [self layoutIfNeeded];
+}
+
+- (void)setTableView:(UITableView *)tableView{
+    if (_tableView != tableView && tableView) {
+        _tableView = tableView;
+        //监听tableView的contentOffset变化
+        
+        [self.tableView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"contentOffset"]) {
+        [self __closeAllOpenCell];
+    }
 }
 
 
@@ -138,57 +165,10 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
         return;
     }
     self.totalCount = [self.swipeCellDataSource numberOfItemsInSwipeCell:self];
+    //配置数据
     [self configureButtonsIfNeeded];
 }
 
-/* 手势变化中**/
-- (void)changedGesture:(UIPanGestureRecognizer *)gesture
-{
-    if (self.totalCount == 0)  return;
-    //只允许水平滑动
-    CGPoint translation = [gesture translationInView:self.ln_contentView];
-    if (fabs(translation.y) > fabs(translation.x)) {
-        return;
-    }
-    //只允许向左侧划开
-    if (self.ln_contentView.x == 0 && translation.x > 0) {
-        return;
-    }
-    self.state = LNSwipeCellStateMoving;
-    if ([self.swipeCellDelete respondsToSelector:@selector(swipeCellMoving:)]) {
-        [self.swipeCellDelete swipeCellMoving:self];
-    }
-    
-    // 手指移动后在相对坐标中的偏移量
-    if (self.ln_contentView.x < -self.totalWidth) {
-        CGRect rect = self.ln_contentView.frame;
-        rect.origin.x = -self.totalWidth;
-        self.ln_contentView.frame = rect;
-    }else if (self.ln_contentView.x >0){
-        CGRect rect = self.ln_contentView.frame;
-        rect.origin.x = 0;
-        self.ln_contentView.frame = rect;
-    }else{
-        CGFloat center_x = self.ln_contentView.center.x;
-        center_x += translation.x;
-        self.ln_contentView.center = CGPointMake(center_x, self.ln_contentView.center.y);
-    }
-    // 清除相对的位移
-    [gesture setTranslation:CGPointZero inView:self.ln_contentView];
-   
-}
-
-- (void)endGesute:(UIPanGestureRecognizer *)gesture
-{
-    //判断花开的宽度是不是达到50，如果是开启，如果没有关闭
-    [self.ln_contentView layoutIfNeeded];
-    if (self.ln_contentView.x < -40 ) {
-        //打开
-        [self open:YES];
-    }else{
-        [self close:YES];
-    }
-}
 
 //设置滑动后的显示
 - (void)configureButtonsIfNeeded
@@ -233,29 +213,57 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
     }
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+/* 手势变化中**/
+- (void)changedGesture:(UIPanGestureRecognizer *)gesture
 {
-    UITouch *touch = [touches anyObject];
-    CGPoint point = [touch locationInView:self.contentView];
-    if (CGRectContainsPoint(self.ln_contentView.frame, point)) {
-
+    if (self.totalCount == 0)  return;
+    //只允许水平滑动
+    CGPoint translation = [gesture translationInView:self.ln_contentView];
+    if (fabs(translation.y) > fabs(translation.x)) {
+        return;
     }
+    //只允许向左侧划开
+    if (self.ln_contentView.x == 0 && translation.x > 0) {
+        return;
+    }
+    self.state = LNSwipeCellStateMoving;
+    [self __closeAllOpenCell];
+    if ([self.swipeCellDelete respondsToSelector:@selector(swipeCellMoving:)]) {
+        [self.swipeCellDelete swipeCellMoving:self];
+    }
+    // 手指移动后在相对坐标中的偏移量
+    if (self.ln_contentView.x < -self.totalWidth) {
+        self.ln_contentView.x = -self.totalWidth;
+    }else if (self.ln_contentView.x > 0){
+        self.ln_contentView.x = 0;
+    }else{
+        self.ln_contentView.centerX  += translation.x;
+    }
+    // 清除相对的位移
+    [gesture setTranslation:CGPointZero inView:self.ln_contentView];
+   
 }
 
-
-- (void)buttonClick:(UIButton *)button
+- (void)endGesute:(UIPanGestureRecognizer *)gesture
 {
-    int index = (int)[self.buttons indexOfObject:button];
-    [self.swipeCellDelete swipeCell:self didSelectButton:button atIndex:index];
+    //判断花开的宽度是不是达到50，如果是开启，如果没有关闭
+    if (self.ln_contentView.x < -self.totalWidth/3 ) {
+        //打开
+        [self open:YES];
+    }else{
+        [self close:YES];
+    }
 }
 
 
 - (void)open:(BOOL)animate
 {
-    if (self.ln_contentView.x == -self.totalWidth) {
+    if (self.ln_contentView.x <= -self.totalWidth) {
+        self.ln_contentView.x = -self.totalWidth;
         self.state = LNSwipeCellStateHadOpen;
         return;
     }
+    
     [UIView animateWithDuration:0.5
                           delay:0
          usingSpringWithDamping:0.6
@@ -270,12 +278,15 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
                          }
                      }];
 }
+
+
 - (void)close:(BOOL)animate
 {
     if (self.ln_contentView.x == 0) {
         self.state = LNSwipeCellStateHadClose;
         return;
     }
+    
     [UIView animateWithDuration:1.0
                           delay:0
          usingSpringWithDamping:0.9
@@ -286,9 +297,170 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
                      } completion:^(BOOL finished){
                          self.state = LNSwipeCellStateHadClose;
                          if ([self.swipeCellDelete respondsToSelector:@selector(swipeCellHadClose:)]) {
-                              [self.swipeCellDelete swipeCellHadClose:self];
+                             [self.swipeCellDelete swipeCellHadClose:self];
                          }
                      }];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    CGPoint point = [touch locationInView:self.contentView];
+    if (CGRectContainsPoint(self.ln_contentView.frame, point)) {
+        //当前cell的处理
+        [self __closeCurrentCell];
+    }
+}
+
+
+- (void)buttonClick:(UIButton *)button
+{
+    int index = (int)[self.buttons indexOfObject:button];
+    [self.swipeCellDelete swipeCell:self didSelectButton:button atIndex:index];
+}
+
+#pragma mark -- 私有方法
+/**
+ 关闭其他cell
+ */
+- (void)__closeAllOpenCell
+{
+    if (self.tableView == nil) return;
+    NSArray *visibleCells = [self.tableView visibleCells];
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        for (LNSwipeCell * cell in visibleCells) {
+            if (cell.state == LNSwipeCellStateHadOpen) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [cell close:YES];
+                });
+                return ;
+            }
+        }
+    });
+}
+
+
+/**
+ 关闭当前cell
+ */
+- (void)__closeCurrentCell
+{
+    if (self.state == LNSwipeCellStateHadOpen) {
+        [self close:YES];
+    }else{
+        [self __closeAllOpenCell];
+    }
+}
+
+- (void)dealloc
+{
+    NSLog(@"%s",__func__);
+}
+
+@end
+
+
+
+
+#pragma mark - 添加一个快速访问的UIView子类的分类
+#pragma mark - 
+
+@implementation UIView (LNFrame)
+
+- (void)setX:(CGFloat)x
+{
+    CGRect frame = self.frame;
+    frame.origin.x = x;
+    self.frame = frame;
+}
+
+- (CGFloat)x
+{
+    return self.frame.origin.x;
+}
+
+- (void)setY:(CGFloat)y
+{
+    CGRect frame = self.frame;
+    frame.origin.y = y;
+    self.frame = frame;
+}
+
+- (CGFloat)y
+{
+    return self.frame.origin.y;
+}
+
+- (void)setWidth:(CGFloat)width
+{
+    CGRect frame = self.frame;
+    frame.size.width = width;
+    self.frame = frame;
+}
+
+- (CGFloat)width
+{
+    return self.bounds.size.width;
+}
+
+- (void)setHeight:(CGFloat)height
+{
+    CGRect frame = self.frame;
+    frame.size.height = height;
+    self.frame = frame;
+}
+
+- (CGFloat)height
+{
+    return self.bounds.size.height;
+}
+
+- (void)setSize:(CGSize)size
+{
+    CGRect frame = self.frame;
+    frame.size = size;
+    self.frame = frame;
+}
+
+- (CGSize)size
+{
+    return self.bounds.size;
+}
+
+- (void)setOrigin:(CGPoint)origin
+{
+    CGRect frame = self.frame;
+    frame.origin = origin;
+    self.frame = frame;
+}
+
+- (CGPoint)origin
+{
+    return self.frame.origin;
+}
+
+- (void)setCenterX:(CGFloat)centerX
+{
+    CGPoint center = self.center;
+    center.x = centerX;
+    self.center = center;
+}
+
+- (CGFloat)centerX
+{
+    return self.center.x;
+}
+
+- (void)setCenterY:(CGFloat)centerY
+{
+    CGPoint center = self.center;
+    center.y = centerY;
+    self.center = center;
+}
+
+- (CGFloat)centerY
+{
+    return self.center.y;
 }
 
 @end

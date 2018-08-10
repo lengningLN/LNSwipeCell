@@ -14,8 +14,6 @@
 		C7D8B789211C32D00086C8D2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C7D8B788211C32D00086C8D2 /* main.m */; };
 		C7D8B79A211C3F4E0086C8D2 /* LNTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7D8B799211C3F4E0086C8D2 /* LNTableViewController.m */; };
 		C7D8B7A2211C3FB90086C8D2 /* LNSwipeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C7D8B79F211C3FB90086C8D2 /* LNSwipeCell.m */; };
-		C7D8B7A3211C3FB90086C8D2 /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = C7D8B7A0211C3FB90086C8D2 /* UIView+Extension.m */; };
-		C7D8B7A4211C3FB90086C8D2 /* LNSwipeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C7D8B7A1211C3FB90086C8D2 /* LNSwipeModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,12 +27,8 @@
 		C7D8B788211C32D00086C8D2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C7D8B798211C3F4E0086C8D2 /* LNTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNTableViewController.h; sourceTree = "<group>"; };
 		C7D8B799211C3F4E0086C8D2 /* LNTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LNTableViewController.m; sourceTree = "<group>"; };
-		C7D8B79C211C3FB90086C8D2 /* UIView+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
 		C7D8B79D211C3FB90086C8D2 /* LNSwipeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LNSwipeCell.h; sourceTree = "<group>"; };
-		C7D8B79E211C3FB90086C8D2 /* LNSwipeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LNSwipeModel.h; sourceTree = "<group>"; };
 		C7D8B79F211C3FB90086C8D2 /* LNSwipeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LNSwipeCell.m; sourceTree = "<group>"; };
-		C7D8B7A0211C3FB90086C8D2 /* UIView+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
-		C7D8B7A1211C3FB90086C8D2 /* LNSwipeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LNSwipeModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,10 +80,6 @@
 			children = (
 				C7D8B79D211C3FB90086C8D2 /* LNSwipeCell.h */,
 				C7D8B79F211C3FB90086C8D2 /* LNSwipeCell.m */,
-				C7D8B79E211C3FB90086C8D2 /* LNSwipeModel.h */,
-				C7D8B7A1211C3FB90086C8D2 /* LNSwipeModel.m */,
-				C7D8B79C211C3FB90086C8D2 /* UIView+Extension.h */,
-				C7D8B7A0211C3FB90086C8D2 /* UIView+Extension.m */,
 			);
 			path = LNSwipeCell;
 			sourceTree = "<group>";
@@ -164,11 +154,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C7D8B7A3211C3FB90086C8D2 /* UIView+Extension.m in Sources */,
 				C7D8B789211C32D00086C8D2 /* main.m in Sources */,
 				C7D8B77B211C32CF0086C8D2 /* AppDelegate.m in Sources */,
 				C7D8B7A2211C3FB90086C8D2 /* LNSwipeCell.m in Sources */,
-				C7D8B7A4211C3FB90086C8D2 /* LNSwipeModel.m in Sources */,
 				C7D8B79A211C3F4E0086C8D2 /* LNTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

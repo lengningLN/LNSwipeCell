@@ -17,7 +17,7 @@ extern const NSString *LNSWIPCELL_IMAGE;
 
 typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
     LNSwipeCellStateHadClose   = 0,//默认全部闭合
-    LNSwipeCellStateMoving    ,    //正在打开
+    LNSwipeCellStateMoving    ,    //正在打开,或者正在关闭，手指还没有离开cell
     LNSwipeCellStateHadOpen   ,    //已经打开
 };
 
@@ -28,10 +28,9 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
 
 
 /**
- 控制cell状态的model
+ 所属的tableView
  */
-@property (nonatomic, strong) LNSwipeModel *swipeModel;
-
+@property (nonatomic, weak) UITableView *tableView;
 
 /**
  cell 的位置
@@ -42,7 +41,15 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
  替换cell的cententView使用
  */
 @property (nonatomic, strong) UIView *ln_contentView;
+
+/**
+ 事件代理
+ */
 @property (nonatomic, weak) id<LNSwipeCellDelete> swipeCellDelete;
+
+/**
+ 数据源代理
+ */
 @property (nonatomic, weak) id<LNSwipeCellDataSource> swipeCellDataSource;
 
 
@@ -51,7 +58,19 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
  */
 @property (nonatomic, assign) LNSwipeCellState state;
 
+/**
+ 打开cell，如果有特殊需求可以调用，一般用不到
+
+ @param animate 是否要动画
+ */
 - (void)open:(BOOL)animate;
+
+
+/**
+ 关闭cell，如果有特殊需求可以调用，一般用不到
+
+ @param animate 是否要动画
+ */
 - (void)close:(BOOL)animate;
 
 @end
@@ -76,7 +95,7 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
  设置每个可操作的item都为button，设置好之后返回
  
  @param swipeCell cell
- @param index   位置
+ @param index   位置自右往左，从0开始
  @return 设置好的item信息：包括字体、颜色、图片、背景色等
  key：font，backgroundColor，title，titleColor，image
  */
@@ -87,7 +106,7 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
  设置每一项的宽度
  
  @param swipeCell cell
- @param index 位置
+ @param index 位置自右往左，从0开始
  @return 宽度
  */
 - (CGFloat)itemWithForSwipeCell:(LNSwipeCell *)swipeCell atIndex:(int)index;
