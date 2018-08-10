@@ -3,9 +3,9 @@
 实现一个和微信功能一样的左滑编辑页面。
 
 # Interduce 【简单介绍】
-- 安装苹果官方的MVC的设计模式实现，类似UITableView的实现方式
-- LNSwipeCell的编辑共能的数据由<LNSwipeCellDataSource>提供
-- LNSwipeCell的编辑功能的事件由<LNSwipeCellDelete>提供
+- 按照苹果官方的MVC的设计模式封装的Cell控件，类似UITableView的实现方式
+- LNSwipeCell的编辑功能的数据由*LNSwipeCellDataSource*提供
+- LNSwipeCell的编辑功能的事件由*LNSwipeCellDelete*提供
 - UIView+Extension类是为了一步到位的访问和修改UIView子类的Frame相关属性
 
 # Features【能做什么】
@@ -21,10 +21,16 @@
 3. UIView+Extension -- 快速访问和修改UIView的Frame相关属性
 
 # Getting Started【开始使用】
+
+## 文字介绍
 - 把三个类拖进工程中
+- 让你的cell继承LNSwipeCell，因为lNSwipeCell只封装了左滑编辑的逻辑和实现，因此你要根据需求自己绘制cell的UI
+- 把之前加载到cell的contentView上的视图，都加载到cell的ln_contentView上
 
 
-## 使用方法
+## 代码介绍
+详细使用请看代码
 
 
-# Installation【安装】
+
+
