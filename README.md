@@ -124,4 +124,6 @@
 # more about  【更多】
 1. 如果有什么问题，请在issue区域提问，我会抽时间改进。
 2. [我的博客](https://www.jianshu.com/u/dbd52f0e4f1c)
+### 打赏
+![](http://m.qpic.cn/psb?/V11R4JcH0fAdbu/rYiFGKO*rsz3odB9curI0NDj4u9bA2qwI5bLHHEjbK8!/b/dDQBAAAAAAAA&bo=WAKEAwAAAAARB.0!&rf=viewer_4)
 
