@@ -9,7 +9,7 @@
 #import "LNTableViewController.h"
 #import "LNSwipeCell.h"
 
-@interface LNTableViewController ()<LNSwipeCellDelete,LNSwipeCellDataSource>
+@interface LNTableViewController ()<LNSwipeCellDelegate,LNSwipeCellDataSource>
 
 @end
 

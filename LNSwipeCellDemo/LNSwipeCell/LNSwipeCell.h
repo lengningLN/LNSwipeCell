@@ -21,7 +21,7 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
     LNSwipeCellStateHadOpen   ,    //已经打开
 };
 
-@protocol LNSwipeCellDataSource , LNSwipeCellDelete;
+@protocol LNSwipeCellDataSource , LNSwipeCellDelegate;
 @class LNSwipeModel;
 
 @interface LNSwipeCell : UITableViewCell
@@ -45,7 +45,7 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
 /**
  事件代理
  */
-@property (nonatomic, weak) id<LNSwipeCellDelete> swipeCellDelete;
+@property (nonatomic, weak) id<LNSwipeCellDelegate> swipeCellDelete;
 
 /**
  数据源代理
@@ -97,7 +97,12 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
  @param swipeCell cell
  @param index   位置自右往左，从0开始
  @return 设置好的item信息：包括字体、颜色、图片、背景色等
- key：font，backgroundColor，title，titleColor，image
+ key包括如下字段，根据需要设置
+ extern const NSString *LNSWIPCELL_FONT;
+ extern const NSString *LNSWIPCELL_TITLE;
+ extern const NSString *LNSWIPCELL_TITLECOLOR;
+ extern const NSString *LNSWIPCELL_BACKGROUNDCOLOR;
+ extern const NSString *LNSWIPCELL_IMAGE;
  */
 - (NSDictionary *)dispositionForSwipeCell:(LNSwipeCell *)swipeCell atIndex:(int)index;
 
@@ -117,7 +122,7 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
 /**
  cell 的事件代理
  */
-@protocol LNSwipeCellDelete <NSObject>
+@protocol LNSwipeCellDelegate <NSObject>
 
 
 /**
