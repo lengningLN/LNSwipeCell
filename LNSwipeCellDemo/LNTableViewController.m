@@ -84,22 +84,22 @@
 
 - (void)swipeCell:(LNSwipeCell *)swipeCell didSelectButton:(UIButton *)button atIndex:(int)index
 {
-    
+    NSLog(@"--%s--",__func__);
 }
 
 
 - (void)swipeCellMoving:(LNSwipeCell *)swipeCell
 {
-    
+    NSLog(@"--%s--",__func__);
 }
 
 - (void)swipeCellHadClose:(LNSwipeCell *)swipeCell {
-    
+    NSLog(@"--%s--",__func__);
 }
 
 
 - (void)swipeCellHadOpen:(LNSwipeCell *)swipeCell {
-    
+    NSLog(@"--%s--",__func__);
 }
 
 
