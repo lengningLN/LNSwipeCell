@@ -58,7 +58,7 @@
 - (int)numberOfItemsInSwipeCell:(LNSwipeCell *)swipeCell;
 
 /**
- 设置每个可操作的item都为button，设置好之后返回
+ 设置每个可操作的item都为button，把需要设置的属性放到字典中返回
  
  @param swipeCell cell
  @param index   位置自右往左，从0开始
