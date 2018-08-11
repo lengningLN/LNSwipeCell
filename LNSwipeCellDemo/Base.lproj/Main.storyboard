@@ -26,7 +26,7 @@
             </objects>
             <point key="canvasLocation" x="-1418" y="-14"/>
         </scene>
-        <!--View Controller-->
+        <!--FirstPage-->
         <scene sceneID="AC6-dG-qgH">
             <objects>
                 <viewController id="JdD-RZ-opp" sceneMemberID="viewController">
@@ -34,8 +34,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" text="增加一个页面的目的是检测使用过程中会不会出现内存泄露！经检测没有内存方面的问题，可以放心的使用！" translatesAutoresizingMaskIntoConstraints="NO" id="TMH-QS-6pS">
+                                <rect key="frame" x="67" y="259" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Yt-dc-h3z">
-                                <rect key="frame" x="89" y="242" width="208" height="89"/>
+                                <rect key="frame" x="67" y="134" width="240" height="89"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.46739431627837746" green="0.70435295139981779" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="NEXT"/>
@@ -47,11 +54,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="w8H-fa-phT"/>
                     </view>
-                    <navigationItem key="navigationItem" id="mtO-jk-K80"/>
+                    <navigationItem key="navigationItem" title="FirstPage" id="mtO-jk-K80"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cD5-re-DsP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-668" y="-14"/>
+            <point key="canvasLocation" x="-668" y="-14.842578710644679"/>
         </scene>
         <!--Table View Controller-->
         <scene sceneID="4w5-8l-wbp">

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C7387E34211E4CDC00F15D5C /* LNTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C7387E33211E4CDC00F15D5C /* LNTableViewCell.m */; };
+		C7387E3F211E51C900F15D5C /* LNCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C7387E3E211E51C900F15D5C /* LNCellModel.m */; };
 		C7D8B77B211C32CF0086C8D2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C7D8B77A211C32CF0086C8D2 /* AppDelegate.m */; };
 		C7D8B781211C32CF0086C8D2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7D8B77F211C32CF0086C8D2 /* Main.storyboard */; };
 		C7D8B783211C32D00086C8D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7D8B782211C32D00086C8D2 /* Assets.xcassets */; };
@@ -17,6 +19,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C7387E32211E4CDC00F15D5C /* LNTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNTableViewCell.h; sourceTree = "<group>"; };
+		C7387E33211E4CDC00F15D5C /* LNTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LNTableViewCell.m; sourceTree = "<group>"; };
+		C7387E3D211E51C900F15D5C /* LNCellModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNCellModel.h; sourceTree = "<group>"; };
+		C7387E3E211E51C900F15D5C /* LNCellModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LNCellModel.m; sourceTree = "<group>"; };
 		C7D8B776211C32CF0086C8D2 /* LNSwipeCellDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LNSwipeCellDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7D8B779211C32CF0086C8D2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C7D8B77A211C32CF0086C8D2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -65,6 +71,10 @@
 				C7D8B77A211C32CF0086C8D2 /* AppDelegate.m */,
 				C7D8B798211C3F4E0086C8D2 /* LNTableViewController.h */,
 				C7D8B799211C3F4E0086C8D2 /* LNTableViewController.m */,
+				C7387E32211E4CDC00F15D5C /* LNTableViewCell.h */,
+				C7387E33211E4CDC00F15D5C /* LNTableViewCell.m */,
+				C7387E3D211E51C900F15D5C /* LNCellModel.h */,
+				C7387E3E211E51C900F15D5C /* LNCellModel.m */,
 				C7D8B79B211C3FB90086C8D2 /* LNSwipeCell */,
 				C7D8B77F211C32CF0086C8D2 /* Main.storyboard */,
 				C7D8B782211C32D00086C8D2 /* Assets.xcassets */,
@@ -155,7 +165,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7D8B789211C32D00086C8D2 /* main.m in Sources */,
+				C7387E34211E4CDC00F15D5C /* LNTableViewCell.m in Sources */,
 				C7D8B77B211C32CF0086C8D2 /* AppDelegate.m in Sources */,
+				C7387E3F211E51C900F15D5C /* LNCellModel.m in Sources */,
 				C7D8B7A2211C3FB90086C8D2 /* LNSwipeCell.m in Sources */,
 				C7D8B79A211C3F4E0086C8D2 /* LNTableViewController.m in Sources */,
 			);

@@ -56,7 +56,12 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
 /**
  当前cell的状态
  */
-@property (nonatomic, assign) LNSwipeCellState state;
+@property (nonatomic, assign, readonly) LNSwipeCellState state;
+
+/**
+ 按钮的总宽度
+ */
+@property (nonatomic, assign, readonly) CGFloat totalWidth;
 
 /**
  打开cell，如果有特殊需求可以调用，一般用不到

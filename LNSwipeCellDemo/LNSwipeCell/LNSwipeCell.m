@@ -36,10 +36,7 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 @property (nonatomic, assign) int totalCount;
 
 
-/**
- 按钮的总宽度
- */
-@property (nonatomic, assign) CGFloat totalWidth;
+
 
 /**
  所有可操作的按钮
@@ -70,6 +67,15 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
     return self;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if(self){
+        [self customUI];
+    }
+    return self;
+}
+
 - (void)layoutSubviews
 {
     [super layoutSubviews];
@@ -89,8 +95,11 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
         //先加两个按钮
         for (int i = 0; i < 2; i++) {
             UIButton *button = [[UIButton alloc]init];
+            button.tag = i;
+            [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
             [self.buttons addObject:button];
             [self.contentView addSubview:button];
+            [self.contentView sendSubviewToBack:button];
         }
         [self.contentView bringSubviewToFront:self.ln_contentView];
     }
@@ -158,7 +167,7 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 
 - (void)beginGesute:(UIPanGestureRecognizer *)gesture
 {
-    self.state = LNSwipeCellStateHadClose;
+    _state = LNSwipeCellStateHadClose;
     //不允许在初始状态下往右边滑动
     CGPoint translation = [gesture translationInView:self.ln_contentView];
     if (self.ln_contentView.x == 0 && translation.x > 0) {
@@ -176,8 +185,11 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
     if (self.buttons.count < self.totalCount) {
         for (NSInteger i = self.buttons.count; i < self.totalCount; i++) {
             UIButton *button = [[UIButton alloc]init];
+            button.tag = i;
+            [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
             [self.buttons addObject:button];
             [self.contentView addSubview:button];
+            [self.contentView sendSubviewToBack:button];
         }
         [self.contentView bringSubviewToFront:self.ln_contentView];
     }else if (self.buttons.count > self.totalCount){
@@ -199,7 +211,6 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
         [button setTitle:dict[LNSWIPCELL_TITLE] forState:UIControlStateNormal];
         [button setTitleColor:dict[LNSWIPCELL_TITLECOLOR] forState:UIControlStateNormal];
         [button setImage:dict[LNSWIPCELL_IMAGE] forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
         
         //获取宽度
         CGFloat width = [self.swipeCellDataSource itemWithForSwipeCell:self atIndex:i];
@@ -208,7 +219,7 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
         left_margin += width;
         // 获取总宽度
         if (i == self.totalCount-1) {
-            self.totalWidth = left_margin;
+            _totalWidth = left_margin;
         }
     }
 }
@@ -226,14 +237,14 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
     if (self.ln_contentView.x == 0 && translation.x > 0) {
         return;
     }
-    self.state = LNSwipeCellStateMoving;
+    _state = LNSwipeCellStateMoving;
     [self __closeAllOpenCell];
     if ([self.swipeCellDelete respondsToSelector:@selector(swipeCellMoving:)]) {
         [self.swipeCellDelete swipeCellMoving:self];
     }
     // 手指移动后在相对坐标中的偏移量
-    if (self.ln_contentView.x < -self.totalWidth) {
-        self.ln_contentView.x = -self.totalWidth;
+    if (self.ln_contentView.x < -_totalWidth) {
+        self.ln_contentView.x = -_totalWidth;
     }else if (self.ln_contentView.x > 0){
         self.ln_contentView.x = 0;
     }else{
@@ -247,7 +258,7 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 - (void)endGesute:(UIPanGestureRecognizer *)gesture
 {
     //判断花开的宽度是不是达到50，如果是开启，如果没有关闭
-    if (self.ln_contentView.x < -self.totalWidth/3 ) {
+    if (self.ln_contentView.x < -_totalWidth/3 ) {
         //打开
         [self open:YES];
     }else{
@@ -258,9 +269,9 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 
 - (void)open:(BOOL)animate
 {
-    if (self.ln_contentView.x <= -self.totalWidth) {
-        self.ln_contentView.x = -self.totalWidth;
-        self.state = LNSwipeCellStateHadOpen;
+    if (self.ln_contentView.x <= -_totalWidth) {
+        self.ln_contentView.x = -_totalWidth;
+        _state = LNSwipeCellStateHadOpen;
         return;
     }
     
@@ -270,9 +281,9 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
           initialSpringVelocity:0
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                         self.ln_contentView.x = -self.totalWidth;
+                         self.ln_contentView.x = -_totalWidth;
                      } completion:^(BOOL finished){
-                         self.state = LNSwipeCellStateHadOpen;
+                         _state = LNSwipeCellStateHadOpen;
                          if ([self.swipeCellDelete respondsToSelector:@selector(swipeCellHadOpen:)]) {
                              [self.swipeCellDelete swipeCellHadClose:self];
                          }
@@ -283,7 +294,7 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 - (void)close:(BOOL)animate
 {
     if (self.ln_contentView.x == 0) {
-        self.state = LNSwipeCellStateHadClose;
+        _state = LNSwipeCellStateHadClose;
         return;
     }
     
@@ -295,7 +306,7 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
                      animations:^{
                          self.ln_contentView.x = 0;
                      } completion:^(BOOL finished){
-                         self.state = LNSwipeCellStateHadClose;
+                         _state = LNSwipeCellStateHadClose;
                          if ([self.swipeCellDelete respondsToSelector:@selector(swipeCellHadClose:)]) {
                              [self.swipeCellDelete swipeCellHadClose:self];
                          }
@@ -316,7 +327,38 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 - (void)buttonClick:(UIButton *)button
 {
     int index = (int)[self.buttons indexOfObject:button];
-    [self.swipeCellDelete swipeCell:self didSelectButton:button atIndex:index];
+    //这里假设为微信的功能，可更需需要自行修改
+    if (index == 0) {
+        if (button.width == self.totalWidth) {
+            [self close:YES];
+            [self.swipeCellDelete swipeCell:self didSelectButton:button atIndex:index];
+        }else{
+            [self deleteAction:button];
+        }
+    }else if (index == 1){
+        [self readAction:button];
+        [self.swipeCellDelete swipeCell:self didSelectButton:button atIndex:index];
+    }
+}
+
+- (void)deleteAction:(UIButton *)button
+{
+    [UIView animateWithDuration:.4
+                          delay:0
+         usingSpringWithDamping:1
+          initialSpringVelocity:5.0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         button.frame = CGRectMake(button.x-(self.totalWidth-button.width), 0, self.totalWidth, button.height);
+                         [button setTitle:@"确认删除" forState:UIControlStateNormal];
+                     } completion:^(BOOL finished){
+                         
+                     }];
+}
+
+- (void)readAction:(UIButton *)button
+{
+    [self close:YES];
 }
 
 #pragma mark -- 私有方法
@@ -345,7 +387,7 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
  */
 - (void)__closeCurrentCell
 {
-    if (self.state == LNSwipeCellStateHadOpen) {
+    if (_state == LNSwipeCellStateHadOpen) {
         [self close:YES];
     }else{
         [self __closeAllOpenCell];
@@ -462,5 +504,8 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 {
     return self.center.y;
 }
+
+
+
 
 @end
