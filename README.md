@@ -1,11 +1,12 @@
 # LNSwipeCell
 一套友好的、方便集成的针对cell的左滑编辑功能！
-实现一个和微信功能一样的左滑编辑页面。
+实现一个类似微信聊天页表的左滑编辑功能。
 
 # 本次优化
 1. 删除多余的类，只提供一个LNSwipeCell，model删除了，把cell的状态放到cell内部管理，view的frame的相关属性的快速访问也集成到cell内部
 2. cell内部的触摸，直接能关闭已经打开的cell
 3. 监听tableView的滑动，关闭已经打开的cell
+4. 提供完整逻辑的Demo
 
 # Interduce 【简单介绍】
 - 按照苹果官方的MVC的设计模式封装的Cell控件，类似UITableView的实现方式
@@ -18,7 +19,7 @@
  - [x] 触摸到已经打开的cell的contentView，关闭cell
  - [x] 触模到其他cell，关闭已经打开的cell
  - [x] 滑动tableView，关闭已经打开的cell
- - [ ] 点击删除按钮，变化为确认删除按钮
+ - [x] 点击删除按钮，变化为确认删除按钮
 
 # Class【使用到的类】
 1. LNSwipeCell   -- 封装了左滑编辑的cell
