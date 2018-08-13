@@ -7,6 +7,7 @@
 2. cell内部的触摸，直接能关闭已经打开的cell
 3. 监听tableView的滑动，关闭已经打开的cell
 4. 提供完整逻辑的Demo
+5. 解决tableView的代理方法 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 不触发的问题
 
 # Interduce 【简单介绍】
 - 按照苹果官方的MVC的设计模式封装的Cell控件，类似UITableView的实现方式
