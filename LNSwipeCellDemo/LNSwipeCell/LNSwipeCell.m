@@ -279,9 +279,9 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
           initialSpringVelocity:0
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                         self.ln_contentView.x = -_totalWidth;
+                         self.ln_contentView.x = -self->_totalWidth;
                      } completion:^(BOOL finished){
-                         _state = LNSwipeCellStateHadOpen;
+                         self->_state = LNSwipeCellStateHadOpen;
                          if ([self.swipeCellDelete respondsToSelector:@selector(swipeCellHadOpen:)]) {
                              [self.swipeCellDelete swipeCellHadClose:self];
                          }
@@ -346,7 +346,7 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
           initialSpringVelocity:5.0
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                         button.frame = CGRectMake(button.x-(_totalWidth-button.width), 0, _totalWidth, button.height);
+                         button.frame = CGRectMake(button.x-(self->_totalWidth-button.width), 0, self->_totalWidth, button.height);
                          [button setTitle:@"确认删除" forState:UIControlStateNormal];
                      } completion:^(BOOL finished){
                          
