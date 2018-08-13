@@ -84,8 +84,6 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 
 - (void)customUI
 {
-    self.layer.masksToBounds = NO;
-    self.contentView.layer.masksToBounds = NO;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     if (self.ln_contentView == nil) {
         UIView *view = [[UIView alloc]init];
@@ -257,7 +255,7 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 
 - (void)endGesute:(UIPanGestureRecognizer *)gesture
 {
-    //判断花开的宽度是不是达到50，如果是开启，如果没有关闭
+    //判断打开的宽度是不是达到三分之一，如果是开启，如果没有关闭
     if (self.ln_contentView.x < -_totalWidth/3 ) {
         //打开
         [self open:YES];
@@ -306,30 +304,29 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
                      animations:^{
                          self.ln_contentView.x = 0;
                      } completion:^(BOOL finished){
-                         _state = LNSwipeCellStateHadClose;
+                         self->_state = LNSwipeCellStateHadClose;
                          if ([self.swipeCellDelete respondsToSelector:@selector(swipeCellHadClose:)]) {
                              [self.swipeCellDelete swipeCellHadClose:self];
                          }
                      }];
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    UITouch *touch = [touches anyObject];
-    CGPoint point = [touch locationInView:self.contentView];
     if (CGRectContainsPoint(self.ln_contentView.frame, point)) {
         //当前cell的处理
         [self __closeCurrentCell];
     }
+   return [super hitTest:point withEvent:event];
 }
-
 
 - (void)buttonClick:(UIButton *)button
 {
     int index = (int)[self.buttons indexOfObject:button];
     //这里假设为微信的功能，可更需需要自行修改
     if (index == 0) {
-        if (button.width == self.totalWidth) {
+        if (button.width == _totalWidth) {
             [self close:YES];
             [self.swipeCellDelete swipeCell:self didSelectButton:button atIndex:index];
         }else{
@@ -349,7 +346,7 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
           initialSpringVelocity:5.0
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                         button.frame = CGRectMake(button.x-(self.totalWidth-button.width), 0, self.totalWidth, button.height);
+                         button.frame = CGRectMake(button.x-(_totalWidth-button.width), 0, _totalWidth, button.height);
                          [button setTitle:@"确认删除" forState:UIControlStateNormal];
                      } completion:^(BOOL finished){
                          

@@ -22,7 +22,6 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
 };
 
 @protocol LNSwipeCellDataSource , LNSwipeCellDelegate;
-@class LNSwipeModel;
 
 @interface LNSwipeCell : UITableViewCell
 
@@ -59,7 +58,7 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
 @property (nonatomic, assign, readonly) LNSwipeCellState state;
 
 /**
- 按钮的总宽度
+ 包含的编辑按钮的总宽度
  */
 @property (nonatomic, assign, readonly) CGFloat totalWidth;
 
