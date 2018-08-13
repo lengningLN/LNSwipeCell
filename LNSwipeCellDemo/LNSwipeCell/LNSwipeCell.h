@@ -27,12 +27,12 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
 
 
 /**
- 所属的tableView
+ 所属的tableView,一定要传
  */
 @property (nonatomic, weak) UITableView *tableView;
 
 /**
- cell 的位置
+ cell 的位置，一定要穿
  */
 @property (nonatomic, strong) NSIndexPath *indexPath;
 

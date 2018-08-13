@@ -102,18 +102,30 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
         [self.contentView bringSubviewToFront:self.ln_contentView];
     }
     
+    [self layoutIfNeeded];
+    
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panGesture:)];
     pan.delegate = self;
     [self.ln_contentView addGestureRecognizer:pan];
     self.panGesture = pan;
-    [self layoutIfNeeded];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapAction)];
+    [self.ln_contentView addGestureRecognizer:tap];
+}
+
+- (void)tapAction
+{
+    if (self.state == LNSwipeCellStateHadOpen) return;
+    
+    if ([self.tableView.delegate respondsToSelector:@selector(tableView:didSelectRowAtIndexPath:)]) {
+        [self.tableView.delegate tableView:self.tableView didSelectRowAtIndexPath:self.indexPath];
+    }
 }
 
 - (void)setTableView:(UITableView *)tableView{
     if (_tableView != tableView && tableView) {
         _tableView = tableView;
         //监听tableView的contentOffset变化
-        
         [self.tableView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
     }
 }

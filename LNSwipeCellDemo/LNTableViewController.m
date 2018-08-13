@@ -70,6 +70,11 @@
     return 80;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"tableView------>%@ , indexPath------->%@",tableView,indexPath);
+}
+
 
 #pragma mark - swipeCellDelegate && dataSource
 - (int)numberOfItemsInSwipeCell:(LNSwipeCell *)swipeCell
