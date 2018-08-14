@@ -34,13 +34,14 @@
 
 - (void)loadData
 {
-    for (int i = 0; i < 30; i++) {
+    for (int i = 0; i < 5; i++) {
         LNCellModel *model = [[LNCellModel alloc]init];
         model.headUrl = @"headImage";
-        model.isTop = i < 5;
+        model.isTop = i < 3;
         model.name = [NSString stringWithFormat:@"宁哥哥-LN-%d",i];
         model.message = [NSString stringWithFormat:@"热爱生活，热爱coding！"];
         model.unreadCount = i%4;
+        model.itemCout = i%3+1;
         [self.dataSource addObject:model];
     }
     [self.tableView reloadData];
@@ -65,6 +66,7 @@
     return cell;
 }
 
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 80;
@@ -72,6 +74,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // LNCellModel *model = self.dataSource[indexPath.row];
+    UIViewController *vc = [[UIViewController alloc]init];
+    vc.view.backgroundColor = [UIColor blueColor];
+    [self.navigationController pushViewController:vc animated:YES];
     NSLog(@"tableView------>%@ , indexPath------->%@",tableView,indexPath);
 }
 
@@ -79,7 +85,8 @@
 #pragma mark - swipeCellDelegate && dataSource
 - (int)numberOfItemsInSwipeCell:(LNSwipeCell *)swipeCell
 {
-    return 2;
+    LNCellModel *model = self.dataSource[swipeCell.indexPath.row];
+    return model.itemCout;
 }
 
 /*
@@ -97,6 +104,9 @@
     if (index == 1) {
         title = model.unreadCount >0 ? @"标为已读":@"标为未读";
         color = [UIColor lightGrayColor];
+    }else if (index == 2){
+        title = model.isTop?@"取消置顶":@"置顶";
+        color = [UIColor blueColor];
     }
     return @{
              LNSWIPCELL_FONT:[UIFont systemFontOfSize:13],
@@ -108,9 +118,9 @@
 - (CGFloat)itemWithForSwipeCell:(LNSwipeCell *)swipeCell atIndex:(int)index
 {
     if (index == 0) {
-        return 50;
+        return 60;
     }else{
-        return 70;
+        return 85;
     }
 }
 
@@ -122,16 +132,38 @@
         //确认删除
         [self.dataSource removeObjectAtIndex:swipeCell.indexPath.row];
         [self.tableView deleteRowsAtIndexPaths:@[swipeCell.indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+        [self.tableView reloadData];
     }else{
         //标为未读/标为已读
-        NSString *title = [button titleForState:UIControlStateNormal];
-        if ([title isEqualToString:@"标为未读"]) {
-            model.unreadCount = 1;
+        if (index == 1) {
+            if (model.unreadCount == 0) {
+                model.unreadCount = 1;
+            }else{
+                model.unreadCount = 0;
+            }
+            LNTableViewCell *cell = (LNTableViewCell*)swipeCell;
+            cell.model = model;
         }else{
-            model.unreadCount = 0;
+            model.isTop = !model.isTop;
+            [self.dataSource removeObject:model];
+            if (model.isTop == YES) {
+                [self.dataSource insertObject:model atIndex:0];
+                [self.tableView setScrollsToTop:YES];
+            }else{
+                for (int i = 0; i < self.dataSource.count; i++) {
+                    LNCellModel *itemModel = self.dataSource[i];
+                    if (itemModel.isTop == NO) {
+                        [self.dataSource insertObject:model atIndex:i];
+                        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+                        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+                        break;
+                    }
+                }
+            }
+            [self.tableView reloadData];
+            return;
         }
-        LNTableViewCell *cell = (LNTableViewCell*)swipeCell;
-        cell.model = model;
+       
     }
 }
 

@@ -14,6 +14,7 @@
 @property (nonatomic, copy) NSString *message;
 @property (nonatomic, copy) NSString *time;
 @property (nonatomic, assign) int unreadCount;
+@property (nonatomic, assign) int itemCout; 
 
 /**
  是否置顶

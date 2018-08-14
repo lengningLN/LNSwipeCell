@@ -9,5 +9,12 @@
 #import "LNCellModel.h"
 
 @implementation LNCellModel
-
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _itemCout = 2;
+    }
+    return self;
+}
 @end
