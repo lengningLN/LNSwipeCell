@@ -62,14 +62,6 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
  */
 @property (nonatomic, assign, readonly) CGFloat totalWidth;
 
-
-
-/**
- 是不是多有的item在滑动的时候，都运动，默认为NO
- */
-@property (nonatomic, assign) BOOL itemAllActive;
-
-
 /**
  打开cell，如果有特殊需求可以调用，一般用不到
 
