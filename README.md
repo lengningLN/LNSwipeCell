@@ -7,6 +7,7 @@
 2. 对cell关闭做优化
 3. 新增当手指接触到tableView空白处能关闭cell
 4. 打开、关闭cell时，完全实现和微信聊天列表页的cell一样的动画效果
+5. Demo中实现不同cell不同数量的编辑model，并实现置顶等功能
 
 
 
@@ -17,11 +18,13 @@
 
 
 # Features【能做什么】
- - [x] 实现左滑显示，标为已读、删除 按钮
- - [x] 触摸到已经打开的cell的contentView，关闭cell
+ - [x] 实现左滑显示，标为已读、删除、置顶等多个按钮
+ - [x] 触摸到已经打开的cell的contentView区域，关闭cell
  - [x] 触模到其他cell，关闭已经打开的cell
  - [x] 滑动tableView，关闭已经打开的cell
+ - [x] 触摸到tableView的空白区域，关闭打开的cell
  - [x] 点击删除按钮，变化为确认删除按钮
+ - [x] 打开和关闭cell时，编辑按钮按照微信一样的动画出现
 
 # Class【使用到的类】
 1. LNSwipeCell   -- 封装了左滑编辑的cell
