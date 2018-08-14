@@ -383,7 +383,7 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
     int index = (int)[self.buttons indexOfObject:button];
     //这里假设为微信的功能，可更需需要自行修改
     if (index == 0) {
-        if (button.width == _totalWidth) {
+        if ([[button titleForState:UIControlStateNormal] isEqualToString:@"确认删除"]) {
             [self close:YES];
             [self.swipeCellDelete swipeCell:self didSelectButton:button atIndex:index];
         }else{
@@ -403,7 +403,10 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
           initialSpringVelocity:5.0
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                         button.frame = CGRectMake(button.x-(self->_totalWidth-button.width), 0, self->_totalWidth, button.height);
+                        if (button.width == self.totalWidth) {
+                            self.ln_contentView.x -= 25;
+                        }
+                         button.frame = CGRectMake(self.ln_contentView.width+self.ln_contentView.x, 0, ABS(self.ln_contentView.x), button.height);
                          [button setTitle:@"确认删除" forState:UIControlStateNormal];
                      } completion:^(BOOL finished){
                          
