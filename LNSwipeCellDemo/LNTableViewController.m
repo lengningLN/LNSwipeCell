@@ -34,11 +34,11 @@
 
 - (void)loadData
 {
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 18; i++) {
         LNCellModel *model = [[LNCellModel alloc]init];
         model.headUrl = @"headImage";
         model.isTop = i < 3;
-        model.name = [NSString stringWithFormat:@"宁哥哥-LN-%d",i];
+        model.name = [NSString stringWithFormat:@"lengningLN-%d",i];
         model.message = [NSString stringWithFormat:@"热爱生活，热爱coding！"];
         model.unreadCount = i%4;
         model.itemCout = i%3+1;

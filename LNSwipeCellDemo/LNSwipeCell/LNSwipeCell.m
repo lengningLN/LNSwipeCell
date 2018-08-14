@@ -373,7 +373,7 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
     if ( contain && self.state == LNSwipeCellStateHadOpen) {
         [self __closeCurrentCell];
     }else{
-        //检车其他cell有没有被打开
+        //检查其他cell有没有被打开
         [self __closeAllOpenCell];
     }
 }
@@ -441,8 +441,13 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 - (BOOL)__hasOpenCell
 {
     NSArray *visibleCells = [self.tableView visibleCells];
-    for (LNSwipeCell * cell in visibleCells) {
-        if (cell.state == LNSwipeCellStateHadOpen) {
+    for (UITableViewCell * cell in visibleCells) {
+        if (![cell isKindOfClass:[LNSwipeCell class]]) {
+            continue;
+        }
+        LNSwipeCell *swipeCell = (LNSwipeCell*)cell;
+        if (swipeCell.state == LNSwipeCellStateHadOpen) {
+            [swipeCell close:YES];
             return YES;
         }
     }
