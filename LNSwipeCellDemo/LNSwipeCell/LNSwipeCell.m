@@ -568,7 +568,34 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
     return self.center.y;
 }
 
-
-
-
 @end
+
+
+#pragma mark -
+#pragma mark ---------------------
+@interface UITableView (LNSwipeCell)
+@end
+
+@implementation UITableView (LNSwipeCell)
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    NSArray *visibleCells = [self visibleCells];
+    if (visibleCells.count == 0) return;
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        for (UITableViewCell * cell in visibleCells) {
+            if (![cell isKindOfClass:[LNSwipeCell class]]) {
+                continue;
+            }
+            LNSwipeCell *swipeCell = (LNSwipeCell *)cell;
+            if (swipeCell.state == LNSwipeCellStateHadOpen) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [swipeCell close:YES];
+                    return ;
+                });
+            }
+        }
+    });
+}
+@end
+
+
