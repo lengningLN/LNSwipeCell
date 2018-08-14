@@ -149,7 +149,8 @@
             if (model.isTop == YES) {
                 [self.dataSource insertObject:model atIndex:0];
                 [self.tableView reloadData];
-                self.tableView.scrollsToTop = YES;
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+                [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
             }else{
                 for (int i = 0; i < self.dataSource.count; i++) {
                     LNCellModel *itemModel = self.dataSource[i];
