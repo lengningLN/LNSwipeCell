@@ -39,7 +39,7 @@
         model.headUrl = @"headImage";
         model.isTop = i < 3;
         model.name = [NSString stringWithFormat:@"lengningLN-%d",i];
-        model.message = [NSString stringWithFormat:@"热爱生活，热爱coding！"];
+        model.message = [NSString stringWithFormat:@"微笑生活🙂，热爱coding！带着笑笑走下去！"];
         model.unreadCount = i%4;
         model.itemCout = i%3+1;
         [self.dataSource addObject:model];
@@ -148,7 +148,8 @@
             [self.dataSource removeObject:model];
             if (model.isTop == YES) {
                 [self.dataSource insertObject:model atIndex:0];
-                [self.tableView setScrollsToTop:YES];
+                [self.tableView reloadData];
+                self.tableView.scrollsToTop = YES;
             }else{
                 for (int i = 0; i < self.dataSource.count; i++) {
                     LNCellModel *itemModel = self.dataSource[i];
@@ -159,8 +160,9 @@
                         break;
                     }
                 }
+                [self.tableView reloadData];
             }
-            [self.tableView reloadData];
+            
             return;
         }
        
