@@ -34,7 +34,7 @@
 
 ## 效果演示
 
-![image](https://github.com/lengningLN/LNSwipeCellDemo/blob/master/LNSwipeCellDemo/resource/swipecell.gif)  
+![](https://github.com/lengningLN/LNSwipeCellDemo/blob/master/LNSwipeCellDemo/resource/swipecell2.gif)  
 
 
 ## 文字介绍
