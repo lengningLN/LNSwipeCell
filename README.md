@@ -32,6 +32,11 @@
 
 # Getting Started【开始使用】
 
+## 效果演示
+
+![image](https://github.com/lengningLN/LNSwipeCellDemo/blob/master/LNSwipeCellDemo/resource/swipecell.gif)  
+
+
 ## 文字介绍
 - 把LNSwipeCell类拖进工程中
 - 让你的cell继承LNSwipeCell，因为lNSwipeCell只封装了左滑编辑的逻辑和实现，因此你要根据需求自己绘制cell的UI
