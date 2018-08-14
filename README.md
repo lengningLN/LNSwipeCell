@@ -3,11 +3,12 @@
 实现一个类似微信聊天页表的左滑编辑功能。
 
 # 本次优化
-1. 删除多余的类，只提供一个LNSwipeCell，model删除了，把cell的状态放到cell内部管理，view的frame的相关属性的快速访问也集成到cell内部
-2. cell内部的触摸，直接能关闭已经打开的cell
-3. 监听tableView的滑动，关闭已经打开的cell
-4. 提供完整逻辑的Demo
-5. 解决tableView的代理方法 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 不触发的问题
+1. 解决删除cell是越界的问题
+2. 对cell关闭做优化
+3. 新增当手指接触到tableView空白处能关闭cell
+4. 打开、关闭cell时，完全实现和微信聊天列表页的cell一样的动画效果
+
+
 
 # Interduce 【简单介绍】
 - 按照苹果官方的MVC的设计模式封装的Cell控件，类似UITableView的实现方式
