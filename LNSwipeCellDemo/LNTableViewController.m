@@ -57,8 +57,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     LNTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"LNTableViewCell"];
-    cell.tableView = tableView;
-    cell.indexPath = indexPath;
     cell.swipeCellDelete = self;
     cell.swipeCellDataSource = self;
     cell.model = self.dataSource[indexPath.row];
@@ -83,9 +81,16 @@
 
 
 #pragma mark - swipeCellDelegate && dataSource
+
+- (BOOL)swipeCellCanSwipe:(LNSwipeCell *)swipeCell atIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
 - (int)numberOfItemsInSwipeCell:(LNSwipeCell *)swipeCell
 {
-    LNCellModel *model = self.dataSource[swipeCell.indexPath.row];
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:swipeCell];
+    LNCellModel *model = self.dataSource[indexPath.row];
     return model.itemCout;
 }
 
@@ -98,7 +103,8 @@
  */
 - (NSDictionary *)dispositionForSwipeCell:(LNSwipeCell *)swipeCell atIndex:(int)index
 {
-    LNCellModel *model = self.dataSource[swipeCell.indexPath.row];
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:swipeCell];
+    LNCellModel *model = self.dataSource[indexPath.row];
     NSString *title = @"删除";
     UIColor *color = [UIColor redColor];
     if (index == 1) {
@@ -127,11 +133,12 @@
 - (void)swipeCell:(LNSwipeCell *)swipeCell didSelectButton:(UIButton *)button atIndex:(int)index
 {
     NSLog(@"--%s--",__func__);
-    LNCellModel *model = self.dataSource[swipeCell.indexPath.row];
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:swipeCell];
+    LNCellModel *model = self.dataSource[indexPath.row];
     if (index == 0) {
         //确认删除
-        [self.dataSource removeObjectAtIndex:swipeCell.indexPath.row];
-        [self.tableView deleteRowsAtIndexPaths:@[swipeCell.indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+        [self.dataSource removeObjectAtIndex:indexPath.row];
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
         [self.tableView reloadData];
     }else{
         //标为未读/标为已读

@@ -26,20 +26,6 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
 @interface LNSwipeCell : UITableViewCell
 
 
-/**
- 所属的tableView,一定要传
- */
-@property (nonatomic, weak) UITableView *tableView;
-
-/**
- cell 的位置，一定要穿
- */
-@property (nonatomic, strong) NSIndexPath *indexPath;
-
-/**
- 替换cell的cententView使用
- */
-@property (nonatomic, strong) UIView *ln_contentView;
 
 /**
  事件代理
@@ -57,10 +43,6 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
  */
 @property (nonatomic, assign, readonly) LNSwipeCellState state;
 
-/**
- 包含的编辑按钮的总宽度
- */
-@property (nonatomic, assign, readonly) CGFloat totalWidth;
 
 /**
  打开cell，如果有特殊需求可以调用，一般用不到
@@ -128,6 +110,15 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
  */
 @protocol LNSwipeCellDelegate <NSObject>
 
+
+/**
+ 是否开启左滑编辑功能
+ 
+ @param swipeCell cell
+ @param indexPath indexPath
+ @return BOOL
+ */
+- (BOOL)swipeCellCanSwipe:(LNSwipeCell *)swipeCell atIndexPath:(NSIndexPath *)indexPath;
 
 /**
  某一个item被点击后触发的事件

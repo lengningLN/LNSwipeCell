@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C707326E2124072900787F76 /* UIView+LNFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = C707326D2124072900787F76 /* UIView+LNFrame.m */; };
 		C7387E34211E4CDC00F15D5C /* LNTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C7387E33211E4CDC00F15D5C /* LNTableViewCell.m */; };
 		C7387E3F211E51C900F15D5C /* LNCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C7387E3E211E51C900F15D5C /* LNCellModel.m */; };
 		C7ACC9EF212317BB0090D7BA /* swipecell2.gif in Resources */ = {isa = PBXBuildFile; fileRef = C7ACC9EE212317BB0090D7BA /* swipecell2.gif */; };
@@ -20,6 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C707326C2124072900787F76 /* UIView+LNFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+LNFrame.h"; sourceTree = "<group>"; };
+		C707326D2124072900787F76 /* UIView+LNFrame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+LNFrame.m"; sourceTree = "<group>"; };
 		C7387E32211E4CDC00F15D5C /* LNTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNTableViewCell.h; sourceTree = "<group>"; };
 		C7387E33211E4CDC00F15D5C /* LNTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LNTableViewCell.m; sourceTree = "<group>"; };
 		C7387E3D211E51C900F15D5C /* LNCellModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LNCellModel.h; sourceTree = "<group>"; };
@@ -101,6 +104,8 @@
 			children = (
 				C7D8B79D211C3FB90086C8D2 /* LNSwipeCell.h */,
 				C7D8B79F211C3FB90086C8D2 /* LNSwipeCell.m */,
+				C707326C2124072900787F76 /* UIView+LNFrame.h */,
+				C707326D2124072900787F76 /* UIView+LNFrame.m */,
 			);
 			path = LNSwipeCell;
 			sourceTree = "<group>";
@@ -180,6 +185,7 @@
 				C7387E34211E4CDC00F15D5C /* LNTableViewCell.m in Sources */,
 				C7D8B77B211C32CF0086C8D2 /* AppDelegate.m in Sources */,
 				C7387E3F211E51C900F15D5C /* LNCellModel.m in Sources */,
+				C707326E2124072900787F76 /* UIView+LNFrame.m in Sources */,
 				C7D8B7A2211C3FB90086C8D2 /* LNSwipeCell.m in Sources */,
 				C7D8B79A211C3F4E0086C8D2 /* LNTableViewController.m in Sources */,
 			);

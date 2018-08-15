@@ -51,28 +51,28 @@
 {
     // 头像，单聊
     _headView = [[UIImageView alloc]init];
-    [self.ln_contentView addSubview:_headView];
+    [self.contentView addSubview:_headView];
     
     // 姓名
     _nameL = [[UILabel alloc]init];
     _nameL.textAlignment = NSTextAlignmentLeft;
     _nameL.font = [UIFont systemFontOfSize:15];
     _nameL.textColor = [UIColor blackColor];
-    [self.ln_contentView addSubview:_nameL];
+    [self.contentView addSubview:_nameL];
     
     // 消息
     _messageL = [[UILabel alloc]init];
     _messageL.textAlignment = NSTextAlignmentLeft;
     _messageL.font = [UIFont systemFontOfSize:13];
     _messageL.textColor = [UIColor lightGrayColor];
-    [self.ln_contentView addSubview:_messageL];
+    [self.contentView addSubview:_messageL];
     
     // 时间
     _timgeL = [[UILabel alloc]init];
     _timgeL.textAlignment = NSTextAlignmentRight;
     _timgeL.font = [UIFont systemFontOfSize:12];
     _timgeL.textColor = [UIColor lightTextColor];
-    [self.ln_contentView addSubview:_timgeL];
+    [self.contentView addSubview:_timgeL];
     
     // 未读消息数
     _countL = [[UILabel alloc]init];
@@ -80,7 +80,7 @@
     _countL.backgroundColor = [UIColor redColor];
     _countL.textColor = [UIColor whiteColor];
     _countL.textAlignment = NSTextAlignmentCenter;
-    [self.ln_contentView addSubview:_countL];
+    [self.contentView addSubview:_countL];
     
     CGFloat screentWidth = [UIScreen mainScreen].bounds.size.width;
     _headView.frame = CGRectMake(15, 15, 50, 50);
@@ -97,7 +97,7 @@
     _model = model;
     // 是否置顶
     
-    self.ln_contentView.backgroundColor = model.isTop?[UIColor colorWithRed:242/255.0 green:250/255.0 blue:1 alpha:1]:[UIColor whiteColor];
+    self.contentView.backgroundColor = model.isTop?[UIColor colorWithRed:242/255.0 green:250/255.0 blue:1 alpha:1]:[UIColor whiteColor];
 
     // 头像
     self.headView.image = [UIImage imageNamed:model.headUrl];
