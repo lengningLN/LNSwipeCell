@@ -23,8 +23,12 @@
  - [x] 触模到其他cell，关闭已经打开的cell
  - [x] 滑动tableView，关闭已经打开的cell
  - [x] 触摸到tableView的空白区域，关闭打开的cell
- - [x] 点击删除按钮，变化为确认删除按钮
  - [x] 打开和关闭cell时，编辑按钮按照微信一样的动画出现
+ - [ ] 点击删除按钮，变化为确认删除按钮
+ 
+# 目前存在的问题
+1. 由删除变化到确认删除的操作有问题，因为一旦改变tableview的子视图的frame，tabelview就会吧contentView归零，目前没找到合适的解决方式
+2. 极端情况细节的处理不够完美
 
 # Class【使用到的类】
 1. LNSwipeCell   -- 封装了左滑编辑的cell
