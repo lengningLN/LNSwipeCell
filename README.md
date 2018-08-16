@@ -53,10 +53,8 @@
 ```
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     LNSwipeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    cell.tableView = tableView;
     cell.swipeCellDelete = self;
     cell.swipeCellDataSource = self;
-    cell.ln_contentView.backgroundColor = indexPath.row %2 == 0 ?[UIColor purpleColor]:[UIColor blueColor];
     
     return cell;
 }
