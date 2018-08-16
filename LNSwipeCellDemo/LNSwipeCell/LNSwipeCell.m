@@ -149,8 +149,8 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 {
     if (self.panGesture == gestureRecognizer) {
         UIPanGestureRecognizer *gesture = (UIPanGestureRecognizer*)gestureRecognizer;
-        if ([self.swipeCellDelete respondsToSelector:@selector(swipeCellCanSwipe:atIndexPath:)]) {
-            self.canSwipe = [self.swipeCellDelete swipeCellCanSwipe:self atIndexPath:self.indexPath];
+        if ([self.swipeCellDelegate respondsToSelector:@selector(swipeCellCanSwipe:atIndexPath:)]) {
+            self.canSwipe = [self.swipeCellDelegate swipeCellCanSwipe:self atIndexPath:self.indexPath];
         }
         //不允许在初始状态下往右边滑动
         CGPoint translation = [gesture translationInView:self.contentView];
@@ -210,6 +210,7 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
     for (int i = 0; i < self.totalCount; i++) {
         CGFloat width = [self.swipeCellDataSource itemWithForSwipeCell:self atIndex:i];
         NSDictionary *dict = [self.swipeCellDataSource dispositionForSwipeCell:self atIndex:i];
+        
         UIButton *button = [[UIButton alloc]init];
         button.tag = i;
         [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -221,9 +222,7 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
         [button setImage:dict[LNSWIPCELL_IMAGE] forState:UIControlStateNormal];
         [self.buttons addObject:button];
         [self insertSubview:button belowSubview:self.contentView];
-        
-        UIView *buttonSuperView = button.superview;
-        [buttonSuperView sendSubviewToBack:button];
+        [self sendSubviewToBack:button];
         
         allButtonWidth += button.width;
         // 获取总宽度
@@ -250,8 +249,8 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
         return;
     }
     _state = LNSwipeCellStateMoving;
-    if ([self.swipeCellDelete respondsToSelector:@selector(swipeCellMoving:)]) {
-        [self.swipeCellDelete swipeCellMoving:self];
+    if ([self.swipeCellDelegate respondsToSelector:@selector(swipeCellMoving:)]) {
+        [self.swipeCellDelegate swipeCellMoving:self];
     }
     // 手指移动后在相对坐标中的偏移量
     if (self.contentView.x < -_totalWidth) {
@@ -312,6 +311,9 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
         self.contentView.x = -_totalWidth;
         _state = LNSwipeCellStateHadOpen;
         self.tableView.allowsSelection = NO;
+        if ([self.swipeCellDelegate respondsToSelector:@selector(swipeCellHadOpen:)]) {
+            [self.swipeCellDelegate swipeCellHadClose:self];
+        }
         return;
     }
     CGFloat duration = 0.5;
@@ -327,8 +329,8 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
                      } completion:^(BOOL finished){
                          self->_state = LNSwipeCellStateHadOpen;
                          self.tableView.allowsSelection = NO;
-                         if ([self.swipeCellDelete respondsToSelector:@selector(swipeCellHadOpen:)]) {
-                             [self.swipeCellDelete swipeCellHadClose:self];
+                         if ([self.swipeCellDelegate respondsToSelector:@selector(swipeCellHadOpen:)]) {
+                             [self.swipeCellDelegate swipeCellHadClose:self];
                          }
                      }];
 }
@@ -339,6 +341,9 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
     if (self.contentView.x == 0) {
         _state = LNSwipeCellStateHadClose;
          self.tableView.allowsSelection = YES;
+        if ([self.swipeCellDelegate respondsToSelector:@selector(swipeCellHadClose:)]) {
+            [self.swipeCellDelegate swipeCellHadClose:self];
+        }
         return;
     }
     [UIView animateWithDuration:1.0
@@ -354,8 +359,8 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
                      } completion:^(BOOL finished){
                          if (finished) {
                              self->_state = LNSwipeCellStateHadClose;
-                             if ([self.swipeCellDelete respondsToSelector:@selector(swipeCellHadClose:)]) {
-                                 [self.swipeCellDelete swipeCellHadClose:self];
+                             if ([self.swipeCellDelegate respondsToSelector:@selector(swipeCellHadClose:)]) {
+                                 [self.swipeCellDelegate swipeCellHadClose:self];
                              }
                              [self clearAllButtons];
                              self.tableView.allowsSelection = YES;
@@ -386,31 +391,41 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
     if (index == 0) {
         if ([[button titleForState:UIControlStateNormal] isEqualToString:@"确认删除"]) {
             [self close:YES];
-            [self.swipeCellDelete swipeCell:self didSelectButton:button atIndex:index];
+            [self.swipeCellDelegate swipeCell:self didSelectButton:button atIndex:index];
         }else{
             [self deleteAction:button];
         }
     }else{
         [self close:YES];
-        [self.swipeCellDelete swipeCell:self didSelectButton:button atIndex:index];
+        [self.swipeCellDelegate swipeCell:self didSelectButton:button atIndex:index];
     }
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    NSLog(@"----------------->%@",NSStringFromCGRect(self.contentView.frame));
 }
 
 - (void)deleteAction:(UIButton *)button
 {
-    [UIView animateWithDuration:.4
+   
+    [UIView animateWithDuration:1
                           delay:0
          usingSpringWithDamping:1
           initialSpringVelocity:5.0
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
+                         button.frame = CGRectMake(self.width-self.totalWidth, button.y, self.totalCount, button.height);
+                         //如果只有一个删除按钮
                         if (button.width == self.totalWidth) {
                             self.contentView.x -= 25;
                         }
-                         button.frame = CGRectMake(self.contentView.width+self.contentView.x, 0, ABS(self.contentView.x), button.height);
+                         button.frame = CGRectMake(self.contentView.width+self.contentView.x, button.y, ABS(self.contentView.x), button.height);
                          [button setTitle:@"确认删除" forState:UIControlStateNormal];
+                         self.contentView.x = -self.totalWidth;
                      } completion:^(BOOL finished){
-                         
+                         self.contentView.x = -self.totalWidth;
                      }];
 }
 
@@ -424,9 +439,11 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
     if (self.tableView == nil) return ;
     NSArray *visibleCells = [self.tableView visibleCells];
     for (UITableViewCell * cell in visibleCells) {
-        if ([cell isKindOfClass:[LNSwipeCell class]] && cell != self) {
+        if ([cell isKindOfClass:[LNSwipeCell class]] && cell != self ) {
             LNSwipeCell *swipeCell = (LNSwipeCell*)cell;
-            [swipeCell close:YES];
+            if (swipeCell.state == LNSwipeCellStateHadOpen) {
+                [swipeCell close:YES];
+            }
         }
     }
 //    dispatch_async(dispatch_get_global_queue(0, 0), ^{

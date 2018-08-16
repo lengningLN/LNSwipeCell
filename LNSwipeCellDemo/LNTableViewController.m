@@ -57,7 +57,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     LNTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"LNTableViewCell"];
-    cell.swipeCellDelete = self;
+    cell.swipeCellDelegate = self;
     cell.swipeCellDataSource = self;
     cell.model = self.dataSource[indexPath.row];
     

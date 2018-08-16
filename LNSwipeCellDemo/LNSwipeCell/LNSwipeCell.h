@@ -30,7 +30,7 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
 /**
  事件代理
  */
-@property (nonatomic, weak) id<LNSwipeCellDelegate> swipeCellDelete;
+@property (nonatomic, weak) id<LNSwipeCellDelegate> swipeCellDelegate;
 
 /**
  数据源代理
