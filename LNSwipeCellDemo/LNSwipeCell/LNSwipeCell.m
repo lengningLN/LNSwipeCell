@@ -389,12 +389,15 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
     int index = (int)[self.buttons indexOfObject:button];
     //这里假设为微信的功能，可更需需要自行修改
     if (index == 0) {
-        if ([[button titleForState:UIControlStateNormal] isEqualToString:@"确认删除"]) {
-            [self close:YES];
-            [self.swipeCellDelegate swipeCell:self didSelectButton:button atIndex:index];
-        }else{
-            [self deleteAction:button];
-        }
+//        if ([[button titleForState:UIControlStateNormal] isEqualToString:@"确认删除"]) {
+//            [self close:YES];
+//            [self.swipeCellDelegate swipeCell:self didSelectButton:button atIndex:index];
+//        }else{
+//            // 后期优化这个功能
+//            [self deleteAction:button];
+//        }
+        [self close:YES];
+        [self.swipeCellDelegate swipeCell:self didSelectButton:button atIndex:index];
     }else{
         [self close:YES];
         [self.swipeCellDelegate swipeCell:self didSelectButton:button atIndex:index];
@@ -406,6 +409,7 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
     [super layoutSubviews];
     NSLog(@"----------------->%@",NSStringFromCGRect(self.contentView.frame));
 }
+
 
 - (void)deleteAction:(UIButton *)button
 {
