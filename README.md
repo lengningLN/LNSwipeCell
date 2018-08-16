@@ -44,7 +44,6 @@
 ## 文字介绍
 - 把LNSwipeCell类拖进工程中
 - 让你的cell继承LNSwipeCell，因为lNSwipeCell只封装了左滑编辑的逻辑和实现，因此你要根据需求自己绘制cell的UI
-- 把之前加载到cell的contentView上的视图，都加载到cell的ln_contentView上
 - 接受LNSwipeCellDataSource和LNSwipeCellDelegate
 - 根据需要实现对应的协议方法
 
