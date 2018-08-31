@@ -53,7 +53,6 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 @property (nonatomic, strong) NSMutableArray *buttons;
 
 
-
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @end
 
@@ -472,6 +471,7 @@ const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 - (void)dealloc
 {
     NSLog(@"%s",__func__);
+    [self.tableView removeObserver:self forKeyPath:@"contentOffset"];
 }
 
 @end
