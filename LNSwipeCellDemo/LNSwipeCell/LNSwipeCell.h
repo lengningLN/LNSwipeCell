@@ -8,11 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-extern const NSString *LNSWIPCELL_FONT;
-extern const NSString *LNSWIPCELL_TITLE;
-extern const NSString *LNSWIPCELL_TITLECOLOR;
-extern const NSString *LNSWIPCELL_BACKGROUNDCOLOR;
-extern const NSString *LNSWIPCELL_IMAGE;
+// 定义编辑文字可修改属性key
+extern NSString *const LNSWIPCELL_FONT;
+extern NSString *const LNSWIPCELL_TITLE;
+extern NSString *const LNSWIPCELL_TITLECOLOR;
+extern NSString *const LNSWIPCELL_BACKGROUNDCOLOR;
+extern NSString *const LNSWIPCELL_IMAGE;
 
 
 typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {

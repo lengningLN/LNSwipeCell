@@ -10,12 +10,12 @@
 #import <objc/runtime.h>
 #import "UIView+LNFrame.h"
 
-//  item 对应的key
-const NSString *LNSWIPCELL_FONT = @"LNSwipeCell_Font";
-const NSString *LNSWIPCELL_TITLE = @"LNSwipeCell_title";
-const NSString *LNSWIPCELL_TITLECOLOR = @"LNSwipeCell_titleColor";
-const NSString *LNSWIPCELL_BACKGROUNDCOLOR = @"LNSwipeCell_backgroundColor";
-const NSString *LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
+// item 对应的key
+NSString *const LNSWIPCELL_FONT = @"LNSwipeCell_Font";
+NSString *const LNSWIPCELL_TITLE = @"LNSwipeCell_title";
+NSString *const LNSWIPCELL_TITLECOLOR = @"LNSwipeCell_titleColor";
+NSString *const LNSWIPCELL_BACKGROUNDCOLOR = @"LNSwipeCell_backgroundColor";
+NSString *const LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 
 @interface LNSwipeCell ()<UIGestureRecognizerDelegate>
 
