@@ -17,6 +17,8 @@ NSString *const LNSWIPCELL_TITLECOLOR = @"LNSwipeCell_titleColor";
 NSString *const LNSWIPCELL_BACKGROUNDCOLOR = @"LNSwipeCell_backgroundColor";
 NSString *const LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 
+static const CGFloat singleItemExtraWidth = 25.0;
+
 @interface LNSwipeCell ()<UIGestureRecognizerDelegate>
 
 
@@ -54,6 +56,9 @@ NSString *const LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
+
+@property (nonatomic, assign) BOOL tryDeleteAction;
+
 @end
 
 @implementation LNSwipeCell
@@ -229,9 +234,6 @@ NSString *const LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
             _totalWidth = allButtonWidth;
         }
     }
-    
-    
-   
 }
 
 /* 手势变化中**/
@@ -268,7 +270,6 @@ NSString *const LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
     }
     // 清除相对的位移
     [gesture setTranslation:CGPointZero inView:self.contentView];
-   
 }
 
 - (void)prepareForReuse
@@ -279,7 +280,6 @@ NSString *const LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 
 - (void)adjustItemsShow
 {
-  
     CGFloat width = ABS(self.contentView.x);
     NSInteger count = _buttons.count;
     CGFloat firstOrginX = self.contentView.width;
@@ -388,15 +388,13 @@ NSString *const LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
     int index = (int)[self.buttons indexOfObject:button];
     //这里假设为微信的功能，可更需需要自行修改
     if (index == 0) {
-//        if ([[button titleForState:UIControlStateNormal] isEqualToString:@"确认删除"]) {
-//            [self close:YES];
-//            [self.swipeCellDelegate swipeCell:self didSelectButton:button atIndex:index];
-//        }else{
-//            // 后期优化这个功能
-//            [self deleteAction:button];
-//        }
-        [self close:YES];
-        [self.swipeCellDelegate swipeCell:self didSelectButton:button atIndex:index];
+        if ([[button titleForState:UIControlStateNormal] isEqualToString:@"确认删除"]) {
+            [self close:YES];
+            [self.swipeCellDelegate swipeCell:self didSelectButton:button atIndex:index];
+        }else{
+            // 后期优化这个功能
+            [self deleteAction:button];
+        }
     }else{
         [self close:YES];
         [self.swipeCellDelegate swipeCell:self didSelectButton:button atIndex:index];
@@ -406,30 +404,39 @@ NSString *const LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    NSLog(@"----------------->%@",NSStringFromCGRect(self.contentView.frame));
+   
+    if (self.state == LNSwipeCellStateHadOpen && self.tryDeleteAction) {
+        if (self.totalCount == 1) {
+            self.contentView.x = -self.totalWidth-singleItemExtraWidth;
+        }else if (self.totalCount > 1){
+            self.contentView.x = - self.totalWidth;
+        }
+    }
+    
 }
 
 
 - (void)deleteAction:(UIButton *)button
 {
-   
-    [UIView animateWithDuration:1
+    self.tryDeleteAction = YES;
+    [UIView animateWithDuration:.5
                           delay:0
          usingSpringWithDamping:1
           initialSpringVelocity:5.0
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                         button.frame = CGRectMake(self.width-self.totalWidth, button.y, self.totalCount, button.height);
                          //如果只有一个删除按钮
+                        CGFloat buttonWidth = self.totalWidth;
                         if (button.width == self.totalWidth) {
-                            self.contentView.x -= 25;
+                            buttonWidth += singleItemExtraWidth;
                         }
-                         button.frame = CGRectMake(self.contentView.width+self.contentView.x, button.y, ABS(self.contentView.x), button.height);
-                         [button setTitle:@"确认删除" forState:UIControlStateNormal];
-                         self.contentView.x = -self.totalWidth;
+                        button.frame = CGRectMake(self.width-buttonWidth, button.y, buttonWidth, button.height);
+                        [button setTitle:@"确认删除" forState:UIControlStateNormal];
                      } completion:^(BOOL finished){
-                         self.contentView.x = -self.totalWidth;
-                     }];
+                         if (finished ) {
+                             self.tryDeleteAction = NO;
+                         }
+    }];
 }
 
 
@@ -449,20 +456,6 @@ NSString *const LNSWIPCELL_IMAGE = @"LNSwipeCell_image";
             }
         }
     }
-//    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//        for (UITableViewCell * cell in visibleCells) {
-//            if (![cell isKindOfClass:[LNSwipeCell class]]) {
-//                continue;
-//            }
-//            LNSwipeCell *swipeCell = (LNSwipeCell*)cell;
-//            if (swipeCell.state == LNSwipeCellStateHadOpen) {
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    [swipeCell close:YES];
-//                });
-//                return ;
-//            }
-//        }
-//    });
 }
 
 
