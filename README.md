@@ -34,6 +34,8 @@
 
 
 # Getting Started【开始使用】
+1. 直接将 LNSwipeCell 拽到工程中使用
+2. 使用cocoapods添加，pod 'LNSwipeCell'
 
 ## 效果演示
 
