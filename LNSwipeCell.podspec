@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
 
   s.name         = "LNSwipeCell"
   s.version      = "2.0.1"
-  s.summary      = "一套友好的、方便集成的针对cell的左滑编辑功能！ 实现一个类似微信聊天列表的左滑编辑功能。."
+  s.summary      = "一套友好的、方便集成的针对cell的左滑编辑功能！"
   s.description  = <<-DESC
   一套友好的、方便集成的针对cell的左滑编辑功能！ 实现一个类似微信聊天列表的左滑编辑功能。
                    DESC
