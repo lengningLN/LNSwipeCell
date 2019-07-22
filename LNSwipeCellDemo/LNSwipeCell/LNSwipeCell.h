@@ -160,6 +160,3 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
 
 
 
-
-
-

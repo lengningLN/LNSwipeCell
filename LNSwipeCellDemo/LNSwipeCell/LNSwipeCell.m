@@ -228,7 +228,7 @@ static const CGFloat singleItemExtraWidth = 25.0;
     //只允许水平滑动
     CGPoint translation = [gesture translationInView:self.contentView];
     if (fabs(translation.y) > fabs(translation.x)) {
-       // return;
+        return;
     }
     // transform.x 往左滑动为负数，往右滑动为正数
     NSLog(@"translation.x-------->%.2f",translation.x);
@@ -257,11 +257,6 @@ static const CGFloat singleItemExtraWidth = 25.0;
     }
 }
 
-//- (void)prepareForReuse
-//{
-//    [super prepareForReuse];
-//    [self close:YES];
-//}
 
 #pragma mark - 调整item的位置
 - (void)adjustItemsShow
