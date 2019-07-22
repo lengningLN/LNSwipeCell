@@ -117,7 +117,6 @@ static const CGFloat singleItemExtraWidth = 25.0;
     pan.delegate = self;
     [self.contentView addGestureRecognizer:pan];
     self.panGesture = pan;
-
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
@@ -125,8 +124,6 @@ static const CGFloat singleItemExtraWidth = 25.0;
     if ([keyPath isEqualToString:@"contentOffset"]) {
         if (self.state == LNSwipeCellStateHadOpen) {
             [self close:YES];
-        }else{
-            [self __closeOtherOpenCell];
         }
     }
 }
@@ -139,7 +136,7 @@ static const CGFloat singleItemExtraWidth = 25.0;
         UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer*)gestureRecognizer;
         CGPoint velocity = [panGesture velocityInView:self.contentView];
         if (velocity.x > 0 || self.state == LNSwipeCellStateHadOpen) {
-            [self close:YES];
+           // [self close:YES];
             return YES;
         } else if (fabs(velocity.x) > fabs(velocity.y)) {
             return NO;
@@ -151,6 +148,9 @@ static const CGFloat singleItemExtraWidth = 25.0;
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
+    if (self.state == LNSwipeCellStateHadOpen && gestureRecognizer == self.panGesture) {
+        return NO;
+    }
     if (self.panGesture == gestureRecognizer) {
         UIPanGestureRecognizer *gesture = (UIPanGestureRecognizer*)gestureRecognizer;
         if ([self.swipeCellDelegate respondsToSelector:@selector(swipeCellCanSwipe:atIndexPath:)]) {
@@ -168,6 +168,43 @@ static const CGFloat singleItemExtraWidth = 25.0;
     }
     return [super gestureRecognizerShouldBegin:gestureRecognizer];
 }
+
+
+
+//设置滑动后的显示
+- (void)configureButtonsIfNeeded
+{
+    [self clearAllButtons];
+    CGFloat content_width = self.contentView.frame.size.width;
+    CGFloat content_height = self.contentView.frame.size.height;
+    CGFloat allButtonWidth = 0;
+    for (int i = 0; i < self.totalCount; i++) {
+        CGFloat width = [self.swipeCellDataSource itemWithForSwipeCell:self atIndex:i];
+        NSDictionary *dict = [self.swipeCellDataSource dispositionForSwipeCell:self atIndex:i];
+        
+        UIButton *button = [[UIButton alloc]init];
+        button.tag = i;
+        [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+        button.frame = CGRectMake(content_width-1, 0, width, content_height);
+        button.layer.cornerRadius = 8;
+        button.layer.masksToBounds = YES;
+        button.backgroundColor = dict[LNSWIPCELL_BACKGROUNDCOLOR];
+        button.titleLabel.font = dict[LNSWIPCELL_FONT];
+        [button setTitle:dict[LNSWIPCELL_TITLE] forState:UIControlStateNormal];
+        [button setTitleColor:dict[LNSWIPCELL_TITLECOLOR] forState:UIControlStateNormal];
+        [button setImage:dict[LNSWIPCELL_IMAGE] forState:UIControlStateNormal];
+        [self.buttons addObject:button];
+        [self insertSubview:button belowSubview:self.contentView];
+        [self sendSubviewToBack:button];
+        
+        allButtonWidth += button.width;
+        // 获取总宽度
+        if (i == self.totalCount-1) {
+            self.totalWidth = allButtonWidth + self.totalCount+2;
+        }
+    }
+}
+
 
 // 分别处理手势的各个阶段
 - (void)panGesture:(UIPanGestureRecognizer *)recognizer
@@ -191,7 +228,13 @@ static const CGFloat singleItemExtraWidth = 25.0;
 
 - (void)beginGesute:(UIPanGestureRecognizer *)gesture
 {
-    [self __closeOtherOpenCell];
+    if (self.state == LNSwipeCellStateHadOpen) {
+//        [self close:YES];
+//        return;
+    }else{
+        [self __closeOtherOpenCell];
+    }
+    
 }
 
 - (void)clearAllButtons
@@ -204,37 +247,6 @@ static const CGFloat singleItemExtraWidth = 25.0;
     }
 }
 
-//设置滑动后的显示
-- (void)configureButtonsIfNeeded
-{
-    [self clearAllButtons];
-    CGFloat content_width = self.contentView.frame.size.width;
-    CGFloat content_height = self.contentView.frame.size.height;
-    CGFloat allButtonWidth = 0;
-    for (int i = 0; i < self.totalCount; i++) {
-        CGFloat width = [self.swipeCellDataSource itemWithForSwipeCell:self atIndex:i];
-        NSDictionary *dict = [self.swipeCellDataSource dispositionForSwipeCell:self atIndex:i];
-        
-        UIButton *button = [[UIButton alloc]init];
-        button.tag = i;
-        [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
-        button.frame = CGRectMake(content_width, 0, width, content_height);
-        button.backgroundColor = dict[LNSWIPCELL_BACKGROUNDCOLOR];
-        button.titleLabel.font = dict[LNSWIPCELL_FONT];
-        [button setTitle:dict[LNSWIPCELL_TITLE] forState:UIControlStateNormal];
-        [button setTitleColor:dict[LNSWIPCELL_TITLECOLOR] forState:UIControlStateNormal];
-        [button setImage:dict[LNSWIPCELL_IMAGE] forState:UIControlStateNormal];
-        [self.buttons addObject:button];
-        [self insertSubview:button belowSubview:self.contentView];
-        [self sendSubviewToBack:button];
-        
-        allButtonWidth += button.width;
-        // 获取总宽度
-        if (i == self.totalCount-1) {
-            _totalWidth = allButtonWidth;
-        }
-    }
-}
 
 /* 手势变化中**/
 - (void)changedGesture:(UIPanGestureRecognizer *)gesture
@@ -243,41 +255,49 @@ static const CGFloat singleItemExtraWidth = 25.0;
     //只允许水平滑动
     CGPoint translation = [gesture translationInView:self.contentView];
     if (fabs(translation.y) > fabs(translation.x)) {
-        return;
+       // return;
     }
+    // transform.x 往左滑动为负数，往右滑动为正数
+    NSLog(@"translation.x-------->%.2f",translation.x);
     //只允许向左侧划开
-    if (self.contentView.x == 0 && translation.x > 0) {
-        return;
+    if (self.contentView.x > 0) {
+        self.contentView.x = 0;
+    }else if (self.contentView.x < -_totalWidth){
+        self.contentView.x = -_totalWidth;
+    }else {
+        if (self.contentView.x + 2*translation.x < -_totalWidth) {
+            self.contentView.x = -_totalWidth;
+        }else if (self.contentView.x + 2*translation.x > 0){
+            self.contentView.x = 0;
+        }else{
+            self.contentView.x += 2*translation.x;
+        }
+        [self adjustItemsShow];
     }
+    
+    // 清除相对的位移
+    [gesture setTranslation:CGPointZero inView:self.contentView];
+    // 如果正在关闭,则不处理
+//    if (self.state == LNSwipeCellStateCloseing) {
+//        // 让手势失效
+//       // gesture.enabled = NO;
+//        return;
+//    }
+//
+   
     _state = LNSwipeCellStateMoving;
     if ([self.swipeCellDelegate respondsToSelector:@selector(swipeCellMoving:)]) {
         [self.swipeCellDelegate swipeCellMoving:self];
     }
-    // 手指移动后在相对坐标中的偏移量
-    if (self.contentView.x < -_totalWidth) {
-        self.contentView.x = -_totalWidth;
-        [self adjustItemsShow];
-    }else if (self.contentView.x > 0){
-        self.contentView.x = 0;
-    }else{
-        if (self.contentView.x + 2*translation.x >= -_totalWidth) {
-            self.contentView.x += 2*translation.x;
-        }else{
-            self.contentView.x = -_totalWidth;
-        }
-        
-        [self adjustItemsShow];
-    }
-    // 清除相对的位移
-    [gesture setTranslation:CGPointZero inView:self.contentView];
 }
 
-- (void)prepareForReuse
-{
-    [super prepareForReuse];
-    [self close:YES];
-}
+//- (void)prepareForReuse
+//{
+//    [super prepareForReuse];
+//    [self close:YES];
+//}
 
+#pragma mark - 调整item的位置
 - (void)adjustItemsShow
 {
     CGFloat width = ABS(self.contentView.x);
@@ -287,9 +307,9 @@ static const CGFloat singleItemExtraWidth = 25.0;
     for (int i = 0 ; i < count; i++) {
         UIButton *item = _buttons[i];
         // 每个按钮占的比例
-        CGFloat scale = item.width/self.totalWidth;
+        CGFloat scale = item.width/_totalWidth;
         indexWidth += scale*width;
-        item.x = firstOrginX-indexWidth;
+        item.x = firstOrginX-indexWidth-i-1;
     }
 }
 
@@ -343,8 +363,10 @@ static const CGFloat singleItemExtraWidth = 25.0;
         if ([self.swipeCellDelegate respondsToSelector:@selector(swipeCellHadClose:)]) {
             [self.swipeCellDelegate swipeCellHadClose:self];
         }
+        self.panGesture.enabled = YES;
         return;
     }
+    _state = LNSwipeCellStateCloseing;
     [UIView animateWithDuration:1.0
                           delay:0
          usingSpringWithDamping:0.8
@@ -361,10 +383,10 @@ static const CGFloat singleItemExtraWidth = 25.0;
                              if ([self.swipeCellDelegate respondsToSelector:@selector(swipeCellHadClose:)]) {
                                  [self.swipeCellDelegate swipeCellHadClose:self];
                              }
-                             [self clearAllButtons];
                              self.tableView.allowsSelection = YES;
+                             self->_state = LNSwipeCellStateHadClose;
+                             self.panGesture.enabled = YES;
                          }
-                        
                      }];
 }
 

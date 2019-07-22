@@ -90,14 +90,16 @@
     _countL.frame = CGRectMake(CGRectGetMaxX(_headView.frame)-13, _headView.frame.origin.y-7, 20, 20);
     _countL.layer.masksToBounds = YES;
     _countL.layer.cornerRadius = 10;
+    
+    self.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)setModel:(LNCellModel *)model
 {
     _model = model;
     // 是否置顶
-    
-    self.contentView.backgroundColor = model.isTop?[UIColor colorWithRed:242/255.0 green:250/255.0 blue:1 alpha:1]:[UIColor whiteColor];
+    self.contentView.backgroundColor = [UIColor yellowColor];;
+    //self.contentView.backgroundColor = model.isTop?[UIColor colorWithRed:242/255.0 green:250/255.0 blue:1 alpha:1]:[UIColor whiteColor];
 
     // 头像
     self.headView.image = [UIImage imageNamed:model.headUrl];
