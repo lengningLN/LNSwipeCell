@@ -63,34 +63,6 @@ static const CGFloat singleItemExtraWidth = 25.0;
 
 @implementation LNSwipeCell
 
-- (UITableView *)tableView
-{
-    if (!_tableView) {
-        UIView *cellSuperView = self.superview;
-        while (cellSuperView && ![cellSuperView isKindOfClass:[UITableView class]]) {
-            cellSuperView = cellSuperView.superview;
-        }
-        if (cellSuperView && [cellSuperView isKindOfClass:[UITableView class]]) {
-            _tableView = (UITableView *)cellSuperView;
-            //监听tableView的contentOffset变化
-            [self.tableView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
-        }
-    }
-    return _tableView;
-}
-
-- (NSIndexPath *)indexPath
-{
-    return [self.tableView indexPathForCell:self];
-}
-
-- (NSMutableArray *)buttons
-{
-    if (!_buttons) {
-        _buttons = [NSMutableArray new];
-    }
-    return _buttons;
-}
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -136,6 +108,7 @@ static const CGFloat singleItemExtraWidth = 25.0;
         UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer*)gestureRecognizer;
         CGPoint velocity = [panGesture velocityInView:self.contentView];
         if (velocity.x > 0 || self.state == LNSwipeCellStateHadOpen) {
+            // 在touchesBegan：的时候处理
            // [self close:YES];
             return YES;
         } else if (fabs(velocity.x) > fabs(velocity.y)) {
@@ -277,13 +250,6 @@ static const CGFloat singleItemExtraWidth = 25.0;
     
     // 清除相对的位移
     [gesture setTranslation:CGPointZero inView:self.contentView];
-    // 如果正在关闭,则不处理
-//    if (self.state == LNSwipeCellStateCloseing) {
-//        // 让手势失效
-//       // gesture.enabled = NO;
-//        return;
-//    }
-//
    
     _state = LNSwipeCellStateMoving;
     if ([self.swipeCellDelegate respondsToSelector:@selector(swipeCellMoving:)]) {
@@ -366,7 +332,6 @@ static const CGFloat singleItemExtraWidth = 25.0;
         self.panGesture.enabled = YES;
         return;
     }
-    _state = LNSwipeCellStateCloseing;
     [UIView animateWithDuration:1.0
                           delay:0
          usingSpringWithDamping:0.8
@@ -482,6 +447,36 @@ static const CGFloat singleItemExtraWidth = 25.0;
 
 
 
+#pragma mark - getter
+
+- (UITableView *)tableView
+{
+    if (!_tableView) {
+        UIView *cellSuperView = self.superview;
+        while (cellSuperView && ![cellSuperView isKindOfClass:[UITableView class]]) {
+            cellSuperView = cellSuperView.superview;
+        }
+        if (cellSuperView && [cellSuperView isKindOfClass:[UITableView class]]) {
+            _tableView = (UITableView *)cellSuperView;
+            //监听tableView的contentOffset变化
+            [self.tableView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
+        }
+    }
+    return _tableView;
+}
+
+- (NSIndexPath *)indexPath
+{
+    return [self.tableView indexPathForCell:self];
+}
+
+- (NSMutableArray *)buttons
+{
+    if (!_buttons) {
+        _buttons = [NSMutableArray new];
+    }
+    return _buttons;
+}
 
 - (void)dealloc
 {

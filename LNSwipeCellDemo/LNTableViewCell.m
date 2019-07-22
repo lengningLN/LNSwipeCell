@@ -98,7 +98,7 @@
 {
     _model = model;
     // 是否置顶
-    self.contentView.backgroundColor = [UIColor yellowColor];;
+    // self.contentView.backgroundColor = [UIColor yellowColor];;
     //self.contentView.backgroundColor = model.isTop?[UIColor colorWithRed:242/255.0 green:250/255.0 blue:1 alpha:1]:[UIColor whiteColor];
 
     // 头像

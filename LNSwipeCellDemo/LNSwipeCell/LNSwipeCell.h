@@ -20,8 +20,6 @@ typedef NS_OPTIONS(NSUInteger, LNSwipeCellState) {
     LNSwipeCellStateHadClose   = 0,//默认全部闭合
     LNSwipeCellStateMoving    ,    //正在打开,或者正在关闭，手指还没有离开cell
     LNSwipeCellStateHadOpen   ,    //已经打开
-    LNSwipeCellStateCloseing, // 正在关闭中，还没关闭
-    
 };
 
 @protocol LNSwipeCellDataSource , LNSwipeCellDelegate;
