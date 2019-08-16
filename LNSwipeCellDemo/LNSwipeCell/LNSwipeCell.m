@@ -327,27 +327,34 @@ static const CGFloat singleItemExtraWidth = 25.0;
         self.panGesture.enabled = YES;
         return;
     }
-    [UIView animateWithDuration:1.0
-                          delay:0
-         usingSpringWithDamping:0.8
-          initialSpringVelocity:5.0
-                        options:UIViewAnimationOptionCurveEaseOut
-                     animations:^{
-                         self.contentView.x = 0;
-                         for (UIButton *button in self->_buttons) {
-                             button.x = self.contentView.width;
-                         }
-                     } completion:^(BOOL finished){
-                         if (finished) {
-                             self->_state = LNSwipeCellStateHadClose;
-                             if ([self.swipeCellDelegate respondsToSelector:@selector(swipeCellHadClose:)]) {
-                                 [self.swipeCellDelegate swipeCellHadClose:self];
+    if (animate) {
+        [UIView animateWithDuration:1.0
+                              delay:0
+             usingSpringWithDamping:0.8
+              initialSpringVelocity:5.0
+                            options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{
+                             self.contentView.x = 0;
+                             for (UIButton *button in self->_buttons) {
+                                 button.x = self.contentView.width;
                              }
-                             self.tableView.allowsSelection = YES;
-                             self->_state = LNSwipeCellStateHadClose;
-                             self.panGesture.enabled = YES;
-                         }
-                     }];
+                         } completion:^(BOOL finished){
+                             if (finished) {
+                                 self->_state = LNSwipeCellStateHadClose;
+                                 if ([self.swipeCellDelegate respondsToSelector:@selector(swipeCellHadClose:)]) {
+                                     [self.swipeCellDelegate swipeCellHadClose:self];
+                                 }
+                                 self.tableView.allowsSelection = YES;
+                                 self.panGesture.enabled = YES;
+                             }
+                         }];
+    }else{
+        self.contentView.x = 0;
+        self->_state = LNSwipeCellStateHadClose;
+        self.tableView.allowsSelection = YES;
+        [self.contentView resignFirstResponder];
+    }
+    
 }
 
 

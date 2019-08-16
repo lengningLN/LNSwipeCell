@@ -180,6 +180,17 @@
 
 - (void)swipeCellMoving:(LNSwipeCell *)swipeCell
 {
+    NSArray *visibleCells = [self.tableView visibleCells];
+    BOOL firstMoveCell = NO;
+    for (LNSwipeCell * cell in visibleCells) {
+        if (cell.state == LNSwipeCellStateMoving ) {
+            if (firstMoveCell == NO) {
+                firstMoveCell = YES;
+            }else{
+                [cell close:NO];
+            }
+        }
+    }
     NSLog(@"--%s--",__func__);
 }
 
