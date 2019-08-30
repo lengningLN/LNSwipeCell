@@ -91,14 +91,6 @@ static const CGFloat singleItemExtraWidth = 25.0;
     self.panGesture = pan;
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
-{
-    if ([keyPath isEqualToString:@"contentOffset"]) {
-        if (self.state == LNSwipeCellStateHadOpen) {
-            [self close:YES];
-        }
-    }
-}
 
 
 // 解决手势冲突
@@ -460,8 +452,6 @@ static const CGFloat singleItemExtraWidth = 25.0;
         }
         if (cellSuperView && [cellSuperView isKindOfClass:[UITableView class]]) {
             _tableView = (UITableView *)cellSuperView;
-            //监听tableView的contentOffset变化
-            [self.tableView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
         }
     }
     return _tableView;
@@ -483,7 +473,6 @@ static const CGFloat singleItemExtraWidth = 25.0;
 - (void)dealloc
 {
     NSLog(@"%s",__func__);
-    [self.tableView removeObserver:self forKeyPath:@"contentOffset"];
 }
 
 @end
